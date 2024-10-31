@@ -1,3 +1,6 @@
 .aider*
 .env
-.devcontainer*
+.devcontainer/*
+aider/*
+bin/*
+obj/*

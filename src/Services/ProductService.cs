@@ -21,6 +21,7 @@ public class ProductService : IProductService
 
     public List<Product> GetProducts(string description, string department)
     {
+        //TODO: add search
         return products;
     }
 

@@ -40,8 +40,7 @@ public class Dispatcher {
     public string? TestOpenAI(string txt) {
         Debug.Assert(this.aiService!=null);
         
-        var result= this.aiService.GenerateEmbedding(txt);
-        //Log.Information(String.Join(",", result.Take(5)));
+        var result= this.aiService.GenerateEmbedding(txt);        
         return result?.GetValue(2)?.ToString();
     }
 
@@ -62,4 +61,5 @@ public class Dispatcher {
         Log.Information($"inflated {this.productService?.GetProducts("", "")?.Count} products");        
         Log.Information($"Department names: {String.Join(",", this.productService?.GetDepartmentNames() ?? new string[]{})}");
     }
+    //TODO: add method to start conversation
 }

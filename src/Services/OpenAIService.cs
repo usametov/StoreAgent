@@ -40,6 +40,8 @@ public class OpenAIService : IAIService
     {
         Debug.Assert(this.chatClient!=null);
         var result = this.chatClient.CompleteChat(new ChatMessage[]{txt});
+        
+        //TODO: parse and return ConversationIntent
         return result.Value.Content[0].Text;
     }
 

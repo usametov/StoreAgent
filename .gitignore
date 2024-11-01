@@ -4,3 +4,5 @@
 aider/*
 bin/*
 obj/*
+StoreAgent.Tests/bin/*
+StoreAgent.Tests/obj/*

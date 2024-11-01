@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Text.Json;
 using StoreAgent.Models;
 
-namespace StoreAgent;
+namespace StoreAgent.Helpers;
 public class CommonUtils {
 
     public static List<Product> DeserializeProductsFromJsonFile(string filePath)
@@ -10,7 +10,7 @@ public class CommonUtils {
         Debug.Assert(File.Exists(filePath));
 
         var jsonString = File.ReadAllText(filePath);
-        return JsonSerializer.Deserialize<List<Product>>(jsonString); 
+        return JsonSerializer.Deserialize<List<Product>>(jsonString) ?? new List<Product>(); 
     }
     public static List<Product> InflateProductEmbeddings(
                             List<Product> products, 

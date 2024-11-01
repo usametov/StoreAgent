@@ -11,9 +11,9 @@ namespace StoreAgent;
 
 public class OpenAIService : IAIService
 {       
-    private AzureOpenAIClient azureOpenAIClient;
-    private ChatClient chatClient;
-    private EmbeddingClient embeddingClient;
+    private AzureOpenAIClient? azureOpenAIClient;
+    private ChatClient? chatClient;
+    private EmbeddingClient? embeddingClient;
     private const string embeddingModel = "text-embedding-3-small";
     private const string completionModel = "gpt-4o-mini";
 

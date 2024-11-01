@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-using Xunit;
 using StoreAgent.Helpers;
-using StoreAgent.Models;
+using Xunit;
 
 namespace StoreAgent.Tests
 {

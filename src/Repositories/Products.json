@@ -1,0 +1,278 @@
+ [
+      {
+        "SKU": "ZYXWVUTS",
+        "name": "Smartphone Case",
+        "department": "electronics",
+        "description": "Protective case for your smartphone.",
+        "price": 14.99
+      },
+      {
+        "SKU": "GFEDCBAH",
+        "name": "Organic Apples",
+        "department": "groceries",
+        "description": "Fresh organic apples from local farms.",
+        "price": 6.49
+      },
+      {
+        "SKU": "MNBVCXZA",
+        "name": "Pain Reliever",
+        "department": "pharmacy",
+        "description": "Fast-acting pain relief medication.",
+        "price": 8.99
+      },
+      {
+        "SKU": "LKJHGFED",
+        "name": "Building Blocks",
+        "department": "kids",
+        "description": "Colorful building blocks for kids.",
+        "price": 24.99
+      },
+      {
+        "SKU": "POIUYTRE",
+        "name": "Wireless Headphones",
+        "department": "electronics",
+        "description": "High-quality wireless headphones with long battery life.",
+        "price": 49.99
+      },
+      {
+        "SKU": "ASDFGHJK",
+        "name": "Baby Formula",
+        "department": "kids",
+        "description": "Nutritious baby formula for infants.",
+        "price": 19.99
+      },
+      {
+        "SKU": "QWERTYUI",
+        "name": "Vitamin C",
+        "department": "pharmacy",
+        "description": "Boost your immune system with vitamin C.",
+        "price": 12.99
+      },
+      {
+        "SKU": "ZXCVBNMA",
+        "name": "Bread Loaf",
+        "department": "groceries",
+        "description": "Freshly baked bread loaf.",
+        "price": 2.99
+      },
+      {
+        "SKU": "HGFEDCBA",
+        "name": "Kids' T-Shirt",
+        "department": "kids",
+        "description": "Comfortable kids' t-shirt with fun design.",
+        "price": 9.99
+      },
+      {
+        "SKU": "NBVCXZAS",
+        "name": "Tablet",
+        "department": "electronics",
+        "description": "Powerful tablet with high-resolution display.",
+        "price": 79.99
+      },
+    {
+    "SKU": "ZYXWVUTS",
+    "name": "Smartphone Case",
+    "department": "electronics",
+    "description": "Protective case for your smartphone.",
+    "price": 14.99
+    },
+    {
+    "SKU": "GFEDCBAH",
+    "name": "Organic Apples",
+    "department": "groceries",
+    "description": "Fresh organic apples from local farms.",
+    "price": 6.49
+    },
+    {
+    "SKU": "MNBVCXZA",
+    "name": "Pain Reliever",
+    "department": "pharmacy",
+    "description": "Fast-acting pain relief medication.",
+    "price": 8.99
+    },
+    {
+    "SKU": "LKJHGFED",
+    "name": "Building Blocks",
+    "department": "kids",
+    "description": "Colorful building blocks for kids.",
+    "price": 24.99
+    },
+    {
+    "SKU": "POIUYTRE",
+    "name": "Wireless Headphones",
+    "department": "electronics",
+    "description": "High-quality wireless headphones with long battery life.",
+    "price": 49.99
+    },
+    {
+    "SKU": "ASDFGHJK",
+    "name": "Baby Formula",
+    "department": "kids",
+    "description": "Nutritious baby formula for infants.",
+    "price": 19.99
+    },
+    {
+    "SKU": "QWERTYUI",
+    "name": "Vitamin C",
+    "department": "pharmacy",
+    "description": "Boost your immune system with vitamin C.",
+    "price": 12.99
+    },
+    {
+    "SKU": "ZXCVBNMA",
+    "name": "Bread Loaf",
+    "department": "groceries",
+    "description": "Freshly baked bread loaf.",
+    "price": 2.99
+    },
+    {
+    "SKU": "HGFEDCBA",
+    "name": "Kids' T-Shirt",
+    "department": "kids",
+    "description": "Comfortable kids' t-shirt with fun design.",
+    "price": 9.99
+    },
+    {
+    "SKU": "NBVCXZAS",
+    "name": "Tablet",
+    "department": "electronics",
+    "description": "Powerful tablet with high-resolution display.",
+    "price": 79.99
+    },
+    {
+    "SKU": "MJNBVCXD",
+    "name": "Gaming Console",
+    "department": "electronics",
+    "description": "Next-generation gaming console with advanced graphics.",
+    "price": 99.99
+    },
+    {
+    "SKU": "LKJHGFVC",
+    "name": "Kids' Shoes",
+    "department": "kids",
+    "description": "Comfortable kids' shoes with durable soles.",
+    "price": 29.99
+    },
+    {
+    "SKU": "POIUYTBG",
+    "name": "Smartwatch",
+    "department": "electronics",
+    "description": "Stylish smartwatch with fitness tracking features.",
+    "price": 69.99
+    },
+    {
+    "SKU": "ASDFGHMN",
+    "name": "Baby Monitor",
+    "department": "kids",
+    "description": "Advanced baby monitor with night vision and motion detection.",
+    "price": 49.99
+    },
+    {
+    "SKU": "QWERTYHB",
+    "name": "Cold Medicine",
+    "department": "pharmacy",
+    "description": "Effective cold medicine with fast-acting relief.",
+    "price": 14.99
+    },
+    {
+    "SKU": "ZXCVBNHG",
+    "name": "Fresh Vegetables",
+    "department": "groceries",
+    "description": "Fresh and healthy vegetables from local farms.",
+    "price": 4.99
+    },
+    {
+    "SKU": "HGFEDCBN",
+    "name": "Kids' Book",
+    "department": "kids",
+    "description": "Colorful kids' book with engaging stories.",
+    "price": 12.99
+    },
+    {
+    "SKU": "NBVCXZHG",
+    "name": "Laptop",
+    "department": "electronics",
+    "description": "Powerful laptop with advanced processor and high-resolution display.",
+    "price": 99.99
+    },
+    {
+    "SKU": "MJNBVCXC",
+    "name": "Gaming Keyboard",
+    "department": "electronics",
+    "description": "Advanced gaming keyboard with customizable backlighting.",
+    "price": 69.99
+    },
+    {
+    "SKU": "LKJHGFVB",
+    "name": "Kids' Toy",
+    "department": "kids",
+    "description": "Fun and educational kids' toy with interactive features.",
+    "price": 19.99
+    },
+    {
+    "SKU": "POIUYTVC",
+    "name": "Smart Speaker",
+    "department": "electronics",
+    "description": "Smart speaker with voice assistant and wireless connectivity.",
+    "price": 49.99
+    },
+    {
+    "SKU": "ASDFGHVC",
+    "name": "Baby Carrier",
+    "department": "kids",
+    "description": "Comfortable baby carrier with adjustable straps.",
+    "price": 29.99
+    },
+    {
+    "SKU": "QWERTYVC",
+    "name": "Allergy Medicine",
+    "department": "pharmacy",
+    "description": "Effective allergy medicine with fast-acting relief.",
+    "price": 14.99
+    },
+    {
+    "SKU": "ZXCVBNVC",
+    "name": "Fresh Fruits",
+    "department": "groceries",
+    "description": "Fresh and healthy fruits from local farms.",
+    "price": 4.99
+    },
+    {
+    "SKU": "HGFEDCVC",
+    "name": "Kids' Game",
+    "department": "kids",
+    "description": "Fun and educational kids' game with interactive features.",
+    "price": 19.99
+    },
+    {
+    "SKU": "NBVCXZVC",
+    "name": "Desktop Computer",
+    "department": "electronics",
+    "description": "Powerful desktop computer with advanced processor and high-resolution display.",
+    "price": 99.99
+    },
+    {
+    "SKU": "MJNBVCVB",
+    "name": "Gaming Mouse",
+    "department": "electronics",
+    "description": "Advanced gaming mouse with customizable buttons and high-precision sensor.",
+    "price": 49.99
+    },
+    {
+    "SKU": "LKJHGFVB",
+    "name": "Kids' Puzzle",
+    "department": "kids",
+    "description": "Fun and educational kids' puzzle with challenging levels.",
+    "price": 14.99
+    },
+    {
+    "SKU": "POIUYTVB",
+    "name": "Smart Thermostat",
+    "department": "electronics",
+    "description": "Smart thermostat with wireless connectivity and energy-saving features.",
+    "price": 69.99
+    }
+]
+      
+  
+  

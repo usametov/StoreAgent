@@ -1,0 +1,26 @@
+using System.Diagnostics;
+using System.Text.Json;
+using StoreAgent.Models;
+
+namespace StoreAgent;
+public class CommonUtils {
+
+    public static List<Product> DeserializeProductsFromJsonFile(string filePath)
+    {
+        Debug.Assert(File.Exists(filePath));
+
+        var jsonString = File.ReadAllText(filePath);
+        return JsonSerializer.Deserialize<List<Product>>(jsonString); 
+    }
+    public static List<Product> InflateProductEmbeddings(
+                            List<Product> products, 
+                            IAIService aiService) 
+    {
+        foreach(var prod in products) {
+            var fullDescription = $"Name: {prod.Name}, Description: {prod.Description}";
+            prod.Embedding = aiService.GenerateEmbedding(fullDescription);        
+        }
+
+        return products;
+    }
+}

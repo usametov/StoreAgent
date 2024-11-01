@@ -1,7 +1,7 @@
 using System.Linq;
 using StoreAgent.Models;
 
-namespace StoreAgent;
+namespace StoreAgent.Services;
 
 public class ProductService : IProductService
 {

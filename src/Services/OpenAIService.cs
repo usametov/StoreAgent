@@ -7,7 +7,7 @@ using System.Diagnostics;
 using Serilog;
 using OpenAI.Embeddings;
 
-namespace StoreAgent;
+namespace StoreAgent.Services;
 
 public class OpenAIService : IAIService
 {       

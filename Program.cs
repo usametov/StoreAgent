@@ -6,6 +6,6 @@ public sealed class Program {
         var dispatcher = new Dispatcher();
         dispatcher.Init();
         dispatcher.LoadProducts();
-        //TODO: start conversation
+        dispatcher.StartConversation();
     }
 }

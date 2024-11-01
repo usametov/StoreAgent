@@ -1,6 +1,6 @@
 using StoreAgent.Models;
 
-namespace StoreAgent;
+namespace StoreAgent.Services;
 
 public interface IProductService {
 

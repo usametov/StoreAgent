@@ -3,11 +3,14 @@ using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 using Serilog;
 using StoreAgent.Helpers;
+using StoreAgent.Services;
 
 namespace StoreAgent;
 public class Dispatcher {
     private IAIService? aiService;
     private IProductService? productService;
+
+    private IShoppingCart? shoppingCart;
 
     public Dispatcher() {        
     }
@@ -17,6 +20,7 @@ public class Dispatcher {
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(new string[]{});
         builder.Services.AddSingleton<IAIService, OpenAIService>();
         builder.Services.AddSingleton<IProductService, ProductService>();
+        builder.Services.AddSingleton<IShoppingCart, ShoppingCart>();
         using IHost host = builder.Build();
         host.RunAsync();
         Debug.Print("host is running");
@@ -25,6 +29,7 @@ public class Dispatcher {
         IServiceProvider provider = serviceScope.ServiceProvider;
         this.aiService = provider.GetRequiredService<IAIService>();
         this.productService = provider.GetRequiredService<IProductService>();
+        this.shoppingCart = provider.GetRequiredService<IShoppingCart>();
         
         this.aiService.ChatEndpoint = ConfigurationManager.GetAzureOpenAIEndpoint();
         this.aiService.EmbeddingEndpoint = ConfigurationManager.GetAzureOpenAIEmbeddingEndpoint();
@@ -62,4 +67,8 @@ public class Dispatcher {
         Log.Information($"Department names: {String.Join(",", this.productService?.GetDepartmentNames() ?? new string[]{})}");
     }
     //TODO: add method to start conversation
+    public void StartConversation()
+    {
+        
+    }
 }

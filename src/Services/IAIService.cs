@@ -1,4 +1,5 @@
-namespace StoreAgent;
+namespace StoreAgent.Services;
+
 public interface IAIService {
     float[] GenerateEmbedding(string txt);
     string ExtractIntent(string txt);

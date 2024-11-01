@@ -5,6 +5,7 @@ using System.ClientModel;
 using OpenAI.Chat;
 using System.Diagnostics;
 using Serilog;
+using OpenAI.Embeddings;
 
 namespace StoreAgent;
 
@@ -12,10 +13,12 @@ public class OpenAIService : IAIService
 {       
     private AzureOpenAIClient azureOpenAIClient;
     private ChatClient chatClient;
+    private EmbeddingClient embeddingClient;
     private const string embeddingModel = "text-embedding-3-small";
     private const string completionModel = "gpt-4o-mini";
 
-    public required string Endpoint { get; set; }
+    public required string ChatEndpoint { get; set; }
+    public required string EmbeddingEndpoint { get; set; }
     public required string Key { get; set; }
 
     public OpenAIService() {}
@@ -26,11 +29,12 @@ public class OpenAIService : IAIService
         Log.Logger = new LoggerConfiguration().WriteTo.Console()
                                               .CreateLogger();
     
-        Log.Information($"Endpoint: {this.Endpoint}, Key: {this.Key}" );
-        this.azureOpenAIClient = new(new Uri(this.Endpoint),
+        Log.Information($"Endpoint: {this.ChatEndpoint}, Key: {this.Key}" );
+        this.azureOpenAIClient = new(new Uri(this.ChatEndpoint),
                                     new ApiKeyCredential(this.Key));
 
         this.chatClient = this.azureOpenAIClient.GetChatClient(completionModel);                            
+        this.embeddingClient = this.azureOpenAIClient.GetEmbeddingClient(embeddingModel);
     }
     public string ExtractIntent(string txt)
     {
@@ -39,12 +43,11 @@ public class OpenAIService : IAIService
         return result.Value.Content[0].Text;
     }
 
-    public ReadOnlyMemory<float> GenerateEmbedding(string txt)
+    public float[] GenerateEmbedding(string txt)
     {        
-        Debug.Assert(this.azureOpenAIClient!=null);
-        var embeddingClient = this.azureOpenAIClient.GetEmbeddingClient(embeddingModel);
+        Debug.Assert(this.embeddingClient!=null);        
         var result = embeddingClient.GenerateEmbedding(txt);        
-        return result.Value.ToFloats();
+        return result.Value.ToFloats().ToArray();
     }
     public bool GetUserConfirmation(string txt)
     {

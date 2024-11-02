@@ -69,6 +69,8 @@ public class Dispatcher {
     //TODO: add method to start conversation
     public void StartConversation()
     {
-        
+        var response = string.Join(", ", this.productService?.GetDepartmentNames() ?? new string[]{});
+        //TODO: add greetings and list store departments.
+        //Console.WriteLine(response);
     }
 }

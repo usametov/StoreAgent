@@ -48,5 +48,28 @@ namespace StoreAgent.Tests
             // Clean up
             File.Delete(filePath);
         }
+
+        [Fact]
+        public void DeserializeAIResponseFromJsonFile1() 
+        {
+            var json = @"{
+                    ""FreeText"": ""Absolutely! We have several packs of diapers available under $30. Let me check the options for you."",
+                    ""ConversationIntent"": {
+                    ""ProductDescription"": ""diapers"",
+                    ""Department"": ""kids"",
+                    ""Quantity"": 2,
+                    ""minPrice"": 0.01,
+                    ""maxPrice"": 30
+                    }
+                }";
+
+            var response = CommonUtils.DeserializeAIResponse(json);                    
+            Assert.Equal("Absolutely! We have several packs of diapers available under $30. Let me check the options for you.", response.FreeText);
+            Assert.Equal("diapers", response.ConversationIntent.ProductDescription);
+            Assert.Equal("kids", response.ConversationIntent.Department);
+            Assert.Equal(2, response.ConversationIntent.Quantity);
+            Assert.Equal(0.01m, response.ConversationIntent.minPrice);
+            Assert.Equal(30m, response.ConversationIntent.maxPrice);
+        }
     }
 }

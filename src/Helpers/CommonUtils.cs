@@ -24,4 +24,10 @@ public class CommonUtils {
 
         return products;
     }
+
+    public static AIResponse DeserializeAIResponse(string response) 
+    {
+        Debug.Assert(response!=null);
+        return JsonSerializer.Deserialize<AIResponse>(response); 
+    }
 }

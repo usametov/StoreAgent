@@ -42,7 +42,7 @@ public class CommonUtils {
 
         if (magnitude1 == 0 || magnitude2 == 0)
         {
-            return 0.0;
+            return 0;
         }
 
         return dotProduct / (magnitude1 * magnitude2);

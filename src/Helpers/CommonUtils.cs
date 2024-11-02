@@ -35,6 +35,7 @@ public class CommonUtils {
     public static double CalculateCosineSimilarity(float[] array1, float[] array2)
     {
         Debug.Assert(array1.Length == array2.Length, "Arrays must be of the same size.");
+        Debug.Assert(array1.Length > 0, "Arrays must not be empty.");
 
         var dotProduct = array1.Zip(array2, (a, b) => a * b).Sum();
         var magnitude1 = Math.Sqrt(array1.Select(a => a * a).Sum());

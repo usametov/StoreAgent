@@ -63,7 +63,7 @@ public class Dispatcher {
             this.productService?.AddProduct(prod);
         }
 
-        Log.Information($"inflated {this.productService?.GetProducts("", "")?.Count} products");        
+        //Log.Information($"inflated {this.productService?.GetSimilarProducts("", "")?.Count} products");        
         Log.Information($"Department names: {String.Join(",", this.productService?.GetDepartmentNames() ?? new string[]{})}");
     }
     //TODO: add method to start conversation

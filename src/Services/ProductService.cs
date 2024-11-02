@@ -1,14 +1,19 @@
 using System.Linq;
 using StoreAgent.Models;
+using System.Diagnostics;
+using StoreAgent.Helpers;
 
 namespace StoreAgent.Services;
 
 public class ProductService : IProductService
 {
-    private List<Product> products; 
+    private List<Product> products;     
+
     public ProductService() {
         this.products = new List<Product>();
     }
+
+
     public void AddProduct(Product prod)
     {
         this.products.Add(prod);
@@ -19,17 +24,11 @@ public class ProductService : IProductService
         return products.Select(p=>p.Department).Distinct().ToArray();
     }
 
-    public List<Product> GetSimilarProducts(string description, string department)
+    public List<ProductSearchResult> GetSimilarProducts(float[] descriptionEmbedding, string department)
     {
         // Ensure products have embeddings
-        if (products.Any(p => p.Embedding == null))
-        {
-            throw new InvalidOperationException("Some products do not have embeddings.");
-        }
-
-        // Generate embedding for the description
-        var descriptionEmbedding = aiService.GenerateEmbedding(description);
-
+        Debug.Assert(products.All(p => p.Embedding != null));
+                
         // Filter products by department
         var departmentProducts = products.Where(p => p.Department == department).ToList();
 
@@ -41,7 +40,7 @@ public class ProductService : IProductService
                 Similarity = CommonUtils.CalculateCosineSimilarity(descriptionEmbedding, p.Embedding)
             })
             .OrderByDescending(p => p.Similarity)
-            .Select(p => p.Product)
+            .Select(p => new ProductSearchResult{Product = p.Product, Score = p.Similarity})
             .ToList();
 
         return similarProducts;

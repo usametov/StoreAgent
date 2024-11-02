@@ -19,7 +19,7 @@ public class ProductService : IProductService
         return products.Select(p=>p.Department).Distinct().ToArray();
     }
 
-    public List<Product> GetProducts(string description, string department)
+    public List<Product> GetSimilarProducts(string description, string department)
     {
         //TODO: add search
         return products;

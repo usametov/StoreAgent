@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Linq;
 using System.Text.Json;
 using StoreAgent.Models;
 using StoreAgent.Services;
@@ -35,19 +36,9 @@ public class CommonUtils {
     {
         Debug.Assert(array1.Length == array2.Length, "Arrays must be of the same size.");
 
-        double dotProduct = 0.0;
-        double magnitude1 = 0.0;
-        double magnitude2 = 0.0;
-
-        for (int i = 0; i < array1.Length; i++)
-        {
-            dotProduct += array1[i] * array2[i];
-            magnitude1 += array1[i] * array1[i];
-            magnitude2 += array2[i] * array2[i];
-        }
-
-        magnitude1 = Math.Sqrt(magnitude1);
-        magnitude2 = Math.Sqrt(magnitude2);
+        var dotProduct = array1.Zip(array2, (a, b) => a * b).Sum();
+        var magnitude1 = Math.Sqrt(array1.Select(a => a * a).Sum());
+        var magnitude2 = Math.Sqrt(array2.Select(a => a * a).Sum());
 
         if (magnitude1 == 0 || magnitude2 == 0)
         {

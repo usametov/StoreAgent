@@ -3,7 +3,6 @@ using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 using Serilog;
 using StoreAgent.Helpers;
-using StoreAgent.Services;
 using StoreAgent.Models;
 
 namespace StoreAgent;
@@ -13,7 +12,6 @@ public class Dispatcher {
     private IProductService? productService;
     private VendingMachine workflow = new VendingMachine();  
 
-    private IShoppingCart? shoppingCart;
 
     public Dispatcher() {              
     }
@@ -23,7 +21,6 @@ public class Dispatcher {
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(new string[]{});
         builder.Services.AddSingleton<IAIService, OpenAIService>();
         builder.Services.AddSingleton<IProductService, ProductService>();
-        builder.Services.AddSingleton<IShoppingCart, ShoppingCart>();
         using IHost host = builder.Build();
         host.RunAsync();
         Debug.Print("host is running");
@@ -32,7 +29,6 @@ public class Dispatcher {
         IServiceProvider provider = serviceScope.ServiceProvider;
         this.aiService = provider.GetRequiredService<IAIService>();
         this.productService = provider.GetRequiredService<IProductService>();
-        this.shoppingCart = provider.GetRequiredService<IShoppingCart>();
         
         this.aiService.ChatEndpoint = ConfigurationManager.GetAzureOpenAIEndpoint();
         this.aiService.EmbeddingEndpoint = ConfigurationManager.GetAzureOpenAIEmbeddingEndpoint();

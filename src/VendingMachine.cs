@@ -21,7 +21,9 @@ public class VendingMachine {
 
     public List<OrderItem> OrderItems {get;set;}
 
-    public decimal? OrderTotal {get;set;}      
+    public decimal? OrderTotal {get;set;}
+
+    public string MessageForCustomer {get;set;}      
 
     private readonly StateMachine<ConversationState, ConversationTrigger> 
             workflow = new(ConversationState.Off);
@@ -49,7 +51,7 @@ public class VendingMachine {
     public void Engage() {
         var promptHelper = new PromptHelper(ProductService?.GetDepartmentNames() ?? new string[]{}); 
         Debug.Assert(promptHelper.Departments.Count() > 0);
-        Console.WriteLine(promptHelper.Greeting());
+        MessageForCustomer = promptHelper.Greeting();
         workflow.Fire(ConversationTrigger.StartConversation);        
     }
 

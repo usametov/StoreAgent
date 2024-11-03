@@ -105,6 +105,7 @@ public class Dispatcher {
         // try to understand what he wants    
         var aiResponse = this.aiService?.ExtractIntent(inquiry);        
         workflow.Engage();
+        Console.WriteLine(workflow.MessageForCustomer);
 
         while(aiResponse?.FreeText!=PromptHelper.TERMINATE) {
 
@@ -115,8 +116,7 @@ public class Dispatcher {
             }                
 
             if(CommonUtils.IsValid(aiResponse?.ConversationIntent)) 
-            {                                
-                
+            {        
                 workflow = SetupSearch(workflow, aiResponse.ConversationIntent);
                 workflow.SearchProduct();                                   
                 //product search is empty, sorry   

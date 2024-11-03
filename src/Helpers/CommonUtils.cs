@@ -4,6 +4,7 @@ using System.Text.Json;
 using StoreAgent.Models;
 using StoreAgent.Services;
 using OpenAI.Chat;
+using Serilog;
 
 namespace StoreAgent.Helpers;
 public class CommonUtils {
@@ -30,13 +31,18 @@ public class CommonUtils {
     public static AIResponse DeserializeAIResponse(string response) 
     {
         Debug.Assert(response!=null);
-        Log.Information("ai response", response);
-        return JsonSerializer.Deserialize<AIResponse>(response); 
+        if(Log.Logger == null)
+            Log.Logger = new LoggerConfiguration().WriteTo.Console()
+                                                  .CreateLogger();    
+                
+        var cleanJson = response.Replace("```json", "").Replace("```", "");
+        Log.Information(cleanJson);
+        return JsonSerializer.Deserialize<AIResponse>(cleanJson); 
     }
 
     public static double CalculateCosineSimilarity(float[] array1, float[] array2)
     {
-        Debug.Assert(array1 == null || array2 == null, "Arrays must not be null.");
+        Debug.Assert(array1 != null && array2 != null, "Arrays must not be null.");
         Debug.Assert(array1.Length == array2.Length, "Arrays must be of the same size.");
         Debug.Assert(array1.Length > 0, "Arrays must not be empty.");
 

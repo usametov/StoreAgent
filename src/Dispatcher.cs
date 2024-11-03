@@ -70,20 +70,21 @@ public class Dispatcher {
         return inquire;
     }
 
-    public void DisplaySearchResults(List<ProductSearchResult> searchResult) {
-
+    public void DisplaySearchResults(List<ProductSearchResult> searchResult) 
+    {
         Console.Write(CommonUtils.StringifyProductSearchResult(searchResult));        
         Console.WriteLine(System.Environment.NewLine);
         Console.WriteLine("Please review product search result and enter list of product SKUs and quantities, separated by colon. E.g. SKU1:2,SKU2:4 ");                   
         Console.WriteLine("If you are not satisfied with the search result, then feel free to search again.");
     }
 
-    public void DisplayReceipt(List<OrderItem> items) {        
-                        
-        Console.WriteLine("Thank youuu, please come agaaain.");
-        Console.WriteLine(System.Environment.NewLine);
+    public void DisplayReceipt(List<OrderItem> items) 
+    {   
+        Console.WriteLine("Your order is ready.");
         Console.Write("Total amount charged: ");                   
-        Console.Write(string.Format("{0:C}", workflow.OrderTotal));                   
+        Console.Write(string.Format("{0:C}", workflow.OrderTotal));
+        Console.WriteLine(System.Environment.NewLine);
+        Console.WriteLine("Thank you, and please come again.");                   
     }
 
     public VendingMachine SetupSearch(VendingMachine workflow,

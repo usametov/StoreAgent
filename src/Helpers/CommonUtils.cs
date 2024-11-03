@@ -91,9 +91,9 @@ public class CommonUtils {
                                 return new OrderItem{Product=product, Quantity = uint.Parse(skuQtyPair[1].Trim())};
                             })
                             .Join(searchResult,
-                                  o=>o.Product.SKU,
-                                  s=>s.Product.SKU,    
-                                  new OrderItem{Product=s.Product, Quantity=o.Quantity})
+                                  o => o.Product.SKU,
+                                  s => s.Product.SKU,
+                                  (o, s) => new OrderItem { Product = s.Product, Quantity = o.Quantity })
                             //.Where(p=>validSKUs.Contains(p.Product.SKU))
                             .ToList();
         }

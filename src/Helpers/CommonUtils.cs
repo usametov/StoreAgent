@@ -30,6 +30,7 @@ public class CommonUtils {
     public static AIResponse DeserializeAIResponse(string response) 
     {
         Debug.Assert(response!=null);
+        Log.Information("ai response", response);
         return JsonSerializer.Deserialize<AIResponse>(response); 
     }
 

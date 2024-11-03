@@ -68,7 +68,7 @@ public class CommonUtils {
         if(searchResult == null || searchResult.Count == 0)
             return string.Empty;
             
-        var rows = searchResult.Select(p => $"SKU:{p.Product.SKU} - {p.Product.Name}, {p.Product.Description}, {p.Product.Price}, Score: {p.Score}");
+        var rows = searchResult.Select(p => $"{p.Product.SKU} - {p.Product.Name}, {p.Product.Description}, {p.Product.Price}, Score: {p.Score}");
         return string.Join(System.Environment.NewLine, rows);
     }
 

@@ -78,6 +78,14 @@ public class Dispatcher {
         Console.WriteLine("If you are not satisfied with the search result, then feel free to search again.");
     }
 
+    public void DisplayReceipt(List<OrderItem> items) {        
+                        
+        Console.WriteLine("Thank youuu, please come agaaain.");
+        Console.WriteLine(System.Environment.NewLine);
+        Console.Write("Total amount charged: ");                   
+        Console.Write(string.Format("{0:C}", workflow.OrderTotal));                   
+    }
+
     public VendingMachine SetupSearch(VendingMachine workflow,
                                                 ConversationIntent intent) 
     {
@@ -127,8 +135,7 @@ public class Dispatcher {
                     }
                     else {
                         workflow.AddOrderItems(orderItems);
-                        //TODO: Thank youuu, please come agaaain.
-                        //Display transaction receipt.
+                        DisplayReceipt(orderItems);
                         break;
                     }      
                 }                

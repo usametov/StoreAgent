@@ -3,7 +3,7 @@ namespace StoreAgent.Models;
 public enum ConversationTrigger {
     StartConversation,
     StartSearch,
-    IntentReady,
+    OrderReady,
     BackToSearch,
     TerminateConversation
 }

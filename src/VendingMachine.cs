@@ -33,7 +33,7 @@ public class VendingMachine {
                 .Permit(ConversationTrigger.TerminateConversation, ConversationState.Off);
 
         workflow.Configure(ConversationState.ProductLookup)
-                .Permit(ConversationTrigger.IntentReady, ConversationState.AddToCart)               
+                .Permit(ConversationTrigger.OrderReady, ConversationState.AddToCart)               
                 .Permit(ConversationTrigger.TerminateConversation, ConversationState.Off);
 
         workflow.Configure(ConversationState.AddToCart)                 
@@ -62,8 +62,9 @@ public class VendingMachine {
     public void Finish() {
         workflow.Fire(ConversationTrigger.TerminateConversation);
     }
+    
     public void AddOrderItems(List<OrderItem> items) {        
         OrderItems.AddRange(items);
-        workflow.Fire(ConversationTrigger.IntentReady);
+        workflow.Fire(ConversationTrigger.OrderReady);
     }
 }

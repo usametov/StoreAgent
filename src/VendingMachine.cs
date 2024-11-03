@@ -10,6 +10,7 @@ namespace StoreAgent;
 public class VendingMachine {
 
     public const int topK = 5;
+    public const double threshold = 0.40;
 
     public float[]? QueryEmbedding {get;set;}
 
@@ -22,6 +23,9 @@ public class VendingMachine {
     public List<OrderItem> OrderItems {get;set;}
 
     public decimal? OrderTotal {get;set;}
+
+    public decimal MinPrice { get; set; }
+    public decimal MaxPrice { get; set; }
 
     public string? MessageForCustomer {get;set;}      
 
@@ -39,7 +43,9 @@ public class VendingMachine {
 
         workflow.Configure(ConversationState.ProductLookup)
                 .Permit(ConversationTrigger.OrderReady, ConversationState.AddToCart)               
-                .Permit(ConversationTrigger.TerminateConversation, ConversationState.Off);
+                .Permit(ConversationTrigger.TerminateConversation, ConversationState.Off)
+                .Permit(ConversationTrigger.StartConversation, ConversationState.On)
+                .PermitReentry(ConversationTrigger.StartSearch);
 
         workflow.Configure(ConversationState.AddToCart)                 
                 .Permit(ConversationTrigger.TerminateConversation, ConversationState.Off)
@@ -61,10 +67,15 @@ public class VendingMachine {
                      && !string.IsNullOrEmpty(Department));                
 
         workflow.Fire(ConversationTrigger.StartSearch);
-        ProductSearchResults = ProductService?.GetSimilarProducts(this.QueryEmbedding, this.Department, topK);                      
-        if(ProductSearchResults?.Count() == 0) 
+        ProductSearchResults = ProductService?.GetSimilarProducts(this.QueryEmbedding, 
+                this.Department, topK, MinPrice, MaxPrice, threshold);
+
+        if(ProductSearchResults?.Count() == 0) {
             MessageForCustomer = "Sorry, we could not find any product matching your inquiry. "
                                 +"Please let me know if you want to search again or terminate up.";
+
+            workflow.Fire(ConversationTrigger.StartConversation);                                            
+        }            
     }
 
     public void Finish() {

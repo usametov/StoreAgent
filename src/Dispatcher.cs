@@ -5,6 +5,8 @@ using Serilog;
 using StoreAgent.Helpers;
 using StoreAgent.Models;
 using StoreAgent.Services;
+using System.Text.Json;
+using System;
 
 namespace StoreAgent;
 
@@ -13,7 +15,6 @@ public class Dispatcher {
     private IAIService? aiService;
     private IProductService? productService;
     private VendingMachine workflow = new VendingMachine();  
-
 
     public Dispatcher() {              
     }
@@ -37,6 +38,8 @@ public class Dispatcher {
         this.aiService.Key = ConfigurationManager.GetAzureOpenAIApiKey();
         this.aiService.Init();
 
+        workflow.ProductService = this.productService;
+
         Log.Logger = new LoggerConfiguration().WriteTo.Console()
                                               .CreateLogger();
     
@@ -46,33 +49,38 @@ public class Dispatcher {
     public void LoadProducts() 
     {
         Debug.Assert(this.aiService!=null);
+        Debug.Assert(this.productService!=null);
+
         var productDB = "/workspaces/StoreAgent/src/Repositories/Products.json";
         var products = CommonUtils.DeserializeProductsFromJsonFile(productDB);    
         Log.Information($"loaded {products.Count} products");
-        Log.Information($"Product 1: {products[0].Name}, {products[0].Description}, {products[0].Price}, {products[0].SKU}");
-
+       
         var inflatedProducts = CommonUtils.InflateProductEmbeddings(products, this.aiService);        
-        foreach(var prod in inflatedProducts) 
-        {
-            this.productService?.AddProduct(prod);
-        }
+        this.productService.AddAllProducts(inflatedProducts);
         
-        Log.Information($"Department names: {String.Join(",", this.productService?.GetDepartmentNames() ?? new string[]{})}");
+        var promptHelper = new PromptHelper(productService.GetDepartmentNames() ?? new string[]{}); 
+        this.aiService.SystemPrompt = promptHelper.GetSystemPrompt();        
     }
 
     public string ListenToCustomer() {
 
-        var inquire = Console.ReadLine();
-        while(string.IsNullOrEmpty(inquire)) {
-            inquire = Console.ReadLine();
+        var inquiry = Console.ReadLine();
+        while(string.IsNullOrEmpty(inquiry)) {
+            inquiry = Console.ReadLine();
         }
-        return inquire;
+        return inquiry;
     }
 
     public AIResponse GetCustomerMessageAndPassIt2AI() 
     {
         string inquiry = ListenToCustomer();
-        return this.aiService?.ExtractIntent(inquiry);
+        try {
+            return this.aiService?.ExtractIntent(inquiry);
+        } 
+        catch(JsonException ex) {
+            Log.Logger.Error(ex, inquiry);
+            throw new ApplicationException(inquiry);
+        } 
     }
 
     public void DisplaySearchResults(List<ProductSearchResult> searchResult) 
@@ -98,18 +106,21 @@ public class Dispatcher {
     {
         workflow.QueryEmbedding =
                     this.aiService?.GenerateEmbedding(intent.ProductDescription);
-                
+
+        Debug.Assert(workflow.QueryEmbedding!= null && workflow.QueryEmbedding.Length > 0);        
         workflow.Department = intent.Department;
+        workflow.MinPrice = intent.minPrice;
+        workflow.MaxPrice = intent.maxPrice;
         workflow.ProductService = productService;                
         return workflow;
     }
     
     public void StartConversation()
-    {        
-        //get request from customer to pass it to AI        
-        var aiResponse = GetCustomerMessageAndPassIt2AI();
+    {   
         workflow.Engage();
-        Console.WriteLine(workflow.MessageForCustomer);
+        Console.WriteLine(workflow.MessageForCustomer);     
+        //get request from customer to pass it to AI        
+        var aiResponse = GetCustomerMessageAndPassIt2AI();        
 
         while(aiResponse?.FreeText!=PromptHelper.TERMINATE) {
 
@@ -126,6 +137,7 @@ public class Dispatcher {
                 //product search is empty, sorry   
                 if(workflow.ProductSearchResults?.Count() == 0) {
                     Console.WriteLine(workflow.MessageForCustomer);
+                    aiResponse = this.aiService?.ExtractIntent(ListenToCustomer());
                 } else {                    
                     //display product search result                    
                     DisplaySearchResults(workflow.ProductSearchResults);                    

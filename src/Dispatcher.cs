@@ -97,8 +97,7 @@ public class Dispatcher {
         Console.WriteLine("Your order is ready.");
         Console.Write("Total amount charged: ");                   
         Console.Write(string.Format("{0:C}", workflow.OrderTotal));
-        Console.WriteLine(System.Environment.NewLine);
-        Console.WriteLine("Thank you, and please come again.");                   
+        Console.WriteLine(System.Environment.NewLine);        
     }
 
     public VendingMachine SetupSearch(VendingMachine workflow,
@@ -157,8 +156,8 @@ public class Dispatcher {
                         continue;
                     }
                 }  
-            } else {
-
+            } else 
+            {
                 Console.WriteLine("Sorry, I did not get that. Could you please repeat your query?");    
                 aiResponse = this.aiService?.ExtractIntent(ListenToCustomer());
                 continue;
@@ -167,5 +166,6 @@ public class Dispatcher {
         }
 
         workflow.Finish();
+        Console.WriteLine(workflow.MessageForCustomer);
     }
 }

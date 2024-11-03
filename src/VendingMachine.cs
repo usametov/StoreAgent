@@ -81,6 +81,7 @@ public class VendingMachine {
 
     public void Finish() {
         workflow.Fire(ConversationTrigger.TerminateConversation);
+        MessageForCustomer = "Thank you, and please come again.";                   
     }
 
     public void AddOrderItems(List<OrderItem> items) {        

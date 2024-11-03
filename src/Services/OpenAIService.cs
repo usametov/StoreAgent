@@ -4,6 +4,7 @@ using Azure.AI.OpenAI;
 using System.ClientModel;
 using OpenAI.Chat;
 using System.Diagnostics;
+using System.Text;
 using Serilog;
 using OpenAI.Embeddings;
 using StoreAgent.Models;
@@ -22,9 +23,10 @@ public class OpenAIService : IAIService
     public required string ChatEndpoint { get; set; }
     public required string EmbeddingEndpoint { get; set; }
     public required string Key { get; set; }
+    public string SystemPrompt {get;set;}
 
-    public OpenAIService() {}
-
+    public OpenAIService() {        
+    }
 
     public void Init() {
 
@@ -41,8 +43,14 @@ public class OpenAIService : IAIService
     public AIResponse ExtractIntent(string txt)
     {
         Debug.Assert(this.chatClient!=null);
+        Debug.Assert(!string.IsNullOrEmpty(this.SystemPrompt));
 
-        var result = this.chatClient.CompleteChat(new ChatMessage[]{txt});                        
+        var message = new StringBuilder();
+        message.Append(this.SystemPrompt); 
+        message.Append("here is customer request: ");
+        message.Append(txt);
+
+        var result = this.chatClient.CompleteChat(new ChatMessage[]{message.ToString()});                        
 
         Log.Information(CommonUtils.StringifyAIResponse(result));
         return CommonUtils.DeserializeAIResponse(result.Value.Content[0].Text.Trim());

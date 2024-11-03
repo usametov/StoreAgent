@@ -68,6 +68,6 @@ public class VendingMachine {
     public void AddOrderItems(List<OrderItem> items) {        
         OrderItems.AddRange(items);
         workflow.Fire(ConversationTrigger.OrderReady);
-        //TODO: calculate order total
+        OrderTotal = OrderItems.Select(o=>o.Product.Price*o.Quantity).Sum();
     }
 }

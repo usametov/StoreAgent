@@ -69,6 +69,12 @@ public class Dispatcher {
         return inquire;
     }
 
+    public AIResponse GetCustomerMessageAndPassIt2AI() 
+    {
+        string inquiry = ListenToCustomer();
+        return this.aiService?.ExtractIntent(inquiry);
+    }
+
     public void DisplaySearchResults(List<ProductSearchResult> searchResult) 
     {
         Debug.Assert(searchResult!=null);
@@ -97,14 +103,11 @@ public class Dispatcher {
         workflow.ProductService = productService;                
         return workflow;
     }
-
     
     public void StartConversation()
     {        
-        //listen to customer
-        var inquiry = ListenToCustomer();
-        // try to understand what he wants    
-        var aiResponse = this.aiService?.ExtractIntent(inquiry);        
+        //get request from customer to pass it to AI        
+        var aiResponse = GetCustomerMessageAndPassIt2AI();
         workflow.Engage();
         Console.WriteLine(workflow.MessageForCustomer);
 
@@ -112,7 +115,7 @@ public class Dispatcher {
 
             if(aiResponse?.FreeText == PromptHelper.ABORT) {
                 Console.WriteLine("Sorry, I can't help you here. Do you want to search again?");
-                aiResponse = this.aiService?.ExtractIntent(ListenToCustomer());
+                aiResponse = GetCustomerMessageAndPassIt2AI();
                 continue;
             }                
 
@@ -125,9 +128,9 @@ public class Dispatcher {
                     Console.WriteLine(workflow.MessageForCustomer);
                 } else {                    
                     //display product search result                    
-                    DisplaySearchResults(workflow.ProductSearchResults);
-                    inquiry = ListenToCustomer();
-                    aiResponse = this.aiService?.ExtractIntent(inquiry);
+                    DisplaySearchResults(workflow.ProductSearchResults);                    
+                    string inquiry = ListenToCustomer();        
+                    aiResponse =  this.aiService?.ExtractIntent(inquiry);
 
                     if(aiResponse?.FreeText == PromptHelper.ORDER_READY 
                         && workflow.TryAddOrderItems(inquiry))                     
@@ -140,9 +143,7 @@ public class Dispatcher {
                         Log.Information("No order items requested", inquiry);                        
                         continue;
                     }
-
-                }                
-
+                }  
             } else {
 
                 Console.WriteLine("Sorry, I did not get that. Could you please repeat your query?");    

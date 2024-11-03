@@ -20,6 +20,8 @@ public class VendingMachine {
 
     public List<OrderItem> OrderItems {get;set;}
 
+    public decimal? OrderTotal {get;set;}      
+
     private readonly StateMachine<ConversationState, ConversationTrigger> 
             workflow = new(ConversationState.Off);
 
@@ -62,9 +64,10 @@ public class VendingMachine {
     public void Finish() {
         workflow.Fire(ConversationTrigger.TerminateConversation);
     }
-    
+
     public void AddOrderItems(List<OrderItem> items) {        
         OrderItems.AddRange(items);
         workflow.Fire(ConversationTrigger.OrderReady);
+        //TODO: calculate order total
     }
 }

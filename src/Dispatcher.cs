@@ -129,7 +129,7 @@ public class Dispatcher {
                     inquiry = ListenToCustomer();
                     aiResponse = this.aiService?.ExtractIntent(inquiry);
 
-                    if(aiResponse.FreeText == PromptHelper.ORDER_READY 
+                    if(aiResponse?.FreeText == PromptHelper.ORDER_READY 
                         && workflow.TryAddOrderItems(inquiry))                     
                     {                        
                         DisplayReceipt(workflow.OrderItems);

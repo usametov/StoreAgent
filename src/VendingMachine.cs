@@ -23,7 +23,7 @@ public class VendingMachine {
 
     public decimal? OrderTotal {get;set;}
 
-    public string MessageForCustomer {get;set;}      
+    public string? MessageForCustomer {get;set;}      
 
     private readonly StateMachine<ConversationState, ConversationTrigger> 
             workflow = new(ConversationState.Off);
@@ -79,6 +79,7 @@ public class VendingMachine {
 
     public bool TryAddOrderItems(string inquiry) 
     {
+        Debug.Assert(ProductSearchResults?.Count() > 0);
         var orderItems = CommonUtils.TryParseSKUs(inquiry, ProductSearchResults);
         if(orderItems.Count() == 0) 
             return false;

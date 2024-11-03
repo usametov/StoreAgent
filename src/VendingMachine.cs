@@ -18,7 +18,7 @@ public class VendingMachine {
 
     public List<ProductSearchResult>? ProductSearchResults {get;set;}
 
-    public OrderItem? OrderItem {get;set;}
+    public List<OrderItem> OrderItems {get;set;}
 
     private readonly StateMachine<ConversationState, ConversationTrigger> 
             workflow = new(ConversationState.Off);
@@ -39,6 +39,8 @@ public class VendingMachine {
         workflow.Configure(ConversationState.AddToCart)                 
                 .Permit(ConversationTrigger.TerminateConversation, ConversationState.Off)
                 .Permit(ConversationTrigger.BackToSearch, ConversationState.ProductLookup);
+        
+        OrderItems = new List<OrderItem>();        
     }
 
     public void Engage() {
@@ -60,7 +62,8 @@ public class VendingMachine {
     public void Finish() {
         workflow.Fire(ConversationTrigger.TerminateConversation);
     }
-    public void AddProducts(List<OrderItem> items) {        
+    public void AddOrderItems(List<OrderItem> items) {        
+        OrderItems.AddRange(items);
         workflow.Fire(ConversationTrigger.IntentReady);
     }
 }

@@ -53,7 +53,7 @@ public class CommonUtils {
 
     public static string StringifyAIResponse(ChatCompletion content) 
     {
-        return string.Join("\n", content.Content.Select(c=>c.Text));
+        return string.Join(System.Environment.NewLine, content.Content.Select(c=>c.Text));
     }
 
     public static string StringifyProductSearchResult(List<ProductSearchResult> searchResult) 
@@ -62,7 +62,7 @@ public class CommonUtils {
             return string.Empty;
             
         var rows = searchResult.Select(p => $"SKU:{p.Product.SKU} - {p.Product.Name}, {p.Product.Description}, {p.Product.Price}, Score: {p.Score}");
-        return string.Join("\n", rows);
+        return string.Join(System.Environment.NewLine, rows);
     }
 
     public static bool IsValid(ConversationIntent intent) {

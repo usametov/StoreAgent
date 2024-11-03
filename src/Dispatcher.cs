@@ -4,10 +4,12 @@ using System.Diagnostics;
 using Serilog;
 using StoreAgent.Helpers;
 using StoreAgent.Models;
+using StoreAgent.Services;
 
 namespace StoreAgent;
 
 public class Dispatcher {
+
     private IAIService? aiService;
     private IProductService? productService;
     private VendingMachine workflow = new VendingMachine();  
@@ -41,13 +43,6 @@ public class Dispatcher {
         Log.Information("done Init");
     }
 
-    public string? TestOpenAI(string txt) {
-        Debug.Assert(this.aiService!=null);
-        
-        var result= this.aiService.GenerateEmbedding(txt);        
-        return result?.GetValue(2)?.ToString();
-    }
-
     public void LoadProducts() 
     {
         Debug.Assert(this.aiService!=null);
@@ -78,6 +73,7 @@ public class Dispatcher {
     public void DisplaySearchResults(List<ProductSearchResult> searchResult) {
 
         Console.Write(CommonUtils.StringifyProductSearchResult(searchResult));        
+        Console.WriteLine(System.Environment.NewLine);
         Console.WriteLine("Please review product search result and enter list of product SKUs and quantities, separated by colon. E.g. SKU1:2,SKU2:4 ");                   
         Console.WriteLine("If you are not satisfied with the search result, then feel free to search again.");
     }
@@ -99,9 +95,7 @@ public class Dispatcher {
         //listen to customer
         var inquiry = ListenToCustomer();
         // try to understand what he wants    
-        var aiResponse = this.aiService?.ExtractIntent(inquiry);
-
-        
+        var aiResponse = this.aiService?.ExtractIntent(inquiry);        
         workflow.Engage();
 
         while(aiResponse?.FreeText!=PromptHelper.TERMINATE) {
@@ -115,8 +109,8 @@ public class Dispatcher {
             if(CommonUtils.IsValid(aiResponse?.ConversationIntent)) {                                
                 
                 workflow = SetupSearch(workflow, aiResponse.ConversationIntent);
-                workflow.SearchProduct();                   
-                //if product search is empty, say, we do not have the product requested.                
+                workflow.SearchProduct();                                   
+                //product search is empty, sorry   
                 if(workflow.ProductSearchResults?.Count() == 0) {
                     Console.WriteLine("Sorry, we could not find any product matching your inquiry. Do you want to search again?");
                 } else {                    
@@ -131,7 +125,7 @@ public class Dispatcher {
                         continue;
                     }
                     else {
-                        workflow.AddProducts(orderItems);
+                        workflow.AddOrderItems(orderItems);
                         //TODO: Thank you, please come again.
                         //Display transaction receipt.
                         break;

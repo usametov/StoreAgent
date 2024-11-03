@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.Json;
 using StoreAgent.Models;
 using StoreAgent.Services;
+using OpenAI.Chat;
 
 namespace StoreAgent.Helpers;
 public class CommonUtils {
@@ -34,6 +35,7 @@ public class CommonUtils {
 
     public static double CalculateCosineSimilarity(float[] array1, float[] array2)
     {
+        Debug.Assert(array1 == null || array2 == null, "Arrays must not be null.");
         Debug.Assert(array1.Length == array2.Length, "Arrays must be of the same size.");
         Debug.Assert(array1.Length > 0, "Arrays must not be empty.");
 
@@ -47,5 +49,45 @@ public class CommonUtils {
         }
 
         return dotProduct / (magnitude1 * magnitude2);
+    }
+
+    public static string StringifyAIResponse(ChatCompletion content) 
+    {
+        return string.Join("\n", content.Content.Select(c=>c.Text));
+    }
+
+    public static string StringifyProductSearchResult(List<ProductSearchResult> searchResult) 
+    {
+        if(searchResult == null || searchResult.Count == 0)
+            return string.Empty;
+            
+        var rows = searchResult.Select(p => $"SKU:{p.Product.SKU} - {p.Product.Name}, {p.Product.Description}, {p.Product.Price}, Score: {p.Score}");
+        return string.Join("\n", rows);
+    }
+
+    public static bool IsValid(ConversationIntent intent) {
+
+        return !string.IsNullOrEmpty(intent?.ProductDescription);
+    }
+
+    public static List<OrderItem> TryParseSKUs(string inquiry, List<ProductSearchResult> searchResult) 
+    {
+        var validSKUs = searchResult.Select(p=>p.Product.SKU).ToHashSet();
+        var skuQtyPairs = inquiry.Split(",");
+
+        try {
+        return skuQtyPairs.Select(pair => 
+                            {
+                                var skuQtyPair = pair.Split(":"); 
+                                var product = new Product{SKU = skuQtyPair[0].Trim(), 
+                                                        Name = "", Description = "", Department = ""};
+                                return new OrderItem{Product=product, Quantity = uint.Parse(skuQtyPair[1].Trim())};
+                            })
+                            .Where(p=>validSKUs.Contains(p.Product.SKU))
+                            .ToList();
+        }
+        catch(FormatException) {
+            return new List<OrderItem>();
+        }
     }
 }

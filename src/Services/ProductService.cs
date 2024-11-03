@@ -24,10 +24,10 @@ public class ProductService : IProductService
         return products.Select(p=>p.Department).Distinct().ToArray();
     }
 
-    public List<ProductSearchResult> GetSimilarProducts(float[] descriptionEmbedding, string department)
+    public List<ProductSearchResult> GetSimilarProducts(float[] descriptionEmbedding, string department, int topK)
     {
-        // Ensure products have embeddings
-        Debug.Assert(products.All(p => p.Embedding != null));
+        // Ensure products have good embeddings
+        Debug.Assert(products.All(p => p.Embedding != null && p.Embedding.Length > 0));
                 
         // Filter products by department
         var departmentProducts = products.Where(p => p.Department == department).ToList();
@@ -37,10 +37,12 @@ public class ProductService : IProductService
             .Select(p => new
             {
                 Product = p,
-                Similarity = CommonUtils.CalculateCosineSimilarity(descriptionEmbedding, p.Embedding)
+                Similarity = CommonUtils.CalculateCosineSimilarity(descriptionEmbedding, p?.Embedding)
             })
             .OrderByDescending(p => p.Similarity)
-            .Select(p => new ProductSearchResult{Product = p.Product, Score = p.Similarity})
+            .Select(p => new ProductSearchResult{Product = p.Product, Score = p.Similarity})            
+            .OrderByDescending(p=>p.Score)
+            .Take(topK)
             .ToList();
 
         return similarProducts;

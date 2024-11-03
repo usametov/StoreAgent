@@ -86,7 +86,7 @@ public class Dispatcher {
         Console.WriteLine("If you are not satisfied with the search result, then feel free to search again.");
     }
 
-    public ConversationStateMachine SetupSearch(ConversationStateMachine workflow,
+    public VendingMachine SetupSearch(VendingMachine workflow,
                                                 ConversationIntent intent) 
     {
         workflow.QueryEmbedding =

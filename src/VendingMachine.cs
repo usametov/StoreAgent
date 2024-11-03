@@ -23,7 +23,7 @@ public class VendingMachine {
     private readonly StateMachine<ConversationState, ConversationTrigger> 
             workflow = new(ConversationState.Off);
 
-    public ConversationStateMachine() {
+    public VendingMachine() {
         workflow.Configure(ConversationState.Off)
                 .Permit(ConversationTrigger.StartConversation, ConversationState.On)
                 .Permit(ConversationTrigger.StartSearch, ConversationState.ProductLookup);

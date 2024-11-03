@@ -1,5 +1,13 @@
+using StoreAgent.Models;
+
 namespace StoreAgent;
 public class PromptHelper {
+
+    public const string TERMINATE = "TERMINATE";
+    public const string ABORT = "ABORT";
+
+    public string Greeting() => 
+        $"Welcome to our Square10 dollar store. We have everything under 100 bucks! Here is our departments list: {this.FormatDepartments()}. Please let me know what are you looking for. Do not forget to specify price range and quantity.";
     public string[] Departments {get;set;}    
     public string FormatDepartments() {return string.Join(", ", this.Departments);}
     public string GetSystemPromptTemplate() =>         
@@ -7,5 +15,7 @@ public class PromptHelper {
 
     public PromptHelper(string[] Departments) {
         this.Departments = Departments;
-    }            
+    }
+
+                
 }

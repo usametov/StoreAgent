@@ -1,4 +1,5 @@
 using StoreAgent.Helpers;
+using StoreAgent.Models;
 using Xunit;
 
 namespace StoreAgent.Tests
@@ -71,27 +72,24 @@ namespace StoreAgent.Tests
             Assert.Equal(0.01m, response.ConversationIntent.minPrice);
             Assert.Equal(30m, response.ConversationIntent.maxPrice);
         }
-    }
-}
-using System;
-using System.Collections.Generic;
-using Xunit;
-using StoreAgent.Helpers;
-using StoreAgent.Models;
-
-namespace StoreAgent.Tests
-{
-    public class CommonUtilsTests
-    {
+    
         [Fact]
         public void TryParseSKUs_ValidInput_ReturnsParsedOrderItems()
         {
             // Arrange
-            var inquiry = "SKU1:2,SKU2:3";
+            var inquiry = "SKU1:2 ,SKU2:3";
             var searchResult = new List<ProductSearchResult>
             {
-                new ProductSearchResult { Product = new Product { SKU = "SKU1" } },
-                new ProductSearchResult { Product = new Product { SKU = "SKU2" } }
+                new ProductSearchResult { 
+                    Product = new Product { SKU = "SKU1",
+                                            Department = "",
+                                            Name = "",
+                                            Description = "" }, Score = 0.9 },
+                new ProductSearchResult { 
+                    Product = new Product { SKU = "SKU2",
+                                            Department = "",
+                                            Name = "",
+                                            Description = "" }, Score = 0.9 }
             };
 
             // Act
@@ -113,8 +111,16 @@ namespace StoreAgent.Tests
             var inquiry = "SKU1:invalid,SKU2:3";
             var searchResult = new List<ProductSearchResult>
             {
-                new ProductSearchResult { Product = new Product { SKU = "SKU1" } },
-                new ProductSearchResult { Product = new Product { SKU = "SKU2" } }
+                new ProductSearchResult { 
+                    Product = new Product { SKU = "SKU1",
+                                            Department = "",
+                                            Name = "",
+                                            Description = ""}, Score =0.9 },
+                new ProductSearchResult { 
+                    Product = new Product { SKU = "SKU2",
+                                            Department = "",
+                                            Name = "",
+                                            Description = "" }, Score =0.9 }
             };
 
             // Act

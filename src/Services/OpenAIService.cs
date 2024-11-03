@@ -6,6 +6,8 @@ using OpenAI.Chat;
 using System.Diagnostics;
 using Serilog;
 using OpenAI.Embeddings;
+using StoreAgent.Models;
+using StoreAgent.Helpers;
 
 namespace StoreAgent.Services;
 
@@ -36,13 +38,14 @@ public class OpenAIService : IAIService
         this.chatClient = this.azureOpenAIClient.GetChatClient(completionModel);                            
         this.embeddingClient = this.azureOpenAIClient.GetEmbeddingClient(embeddingModel);
     }
-    public string ExtractIntent(string txt)
+    public AIResponse ExtractIntent(string txt)
     {
         Debug.Assert(this.chatClient!=null);
-        var result = this.chatClient.CompleteChat(new ChatMessage[]{txt});
-        
-        //TODO: parse and return ConversationIntent
-        return result.Value.Content[0].Text;
+
+        var result = this.chatClient.CompleteChat(new ChatMessage[]{txt});                        
+
+        Log.Information(CommonUtils.StringifyAIResponse(result));
+        return CommonUtils.DeserializeAIResponse(result.Value.Content[0].Text.Trim());
     }
 
     public float[] GenerateEmbedding(string txt)

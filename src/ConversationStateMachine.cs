@@ -6,7 +6,7 @@ using StoreAgent.Models;
 using StoreAgent.Services;
 
 namespace StoreAgent;
-public class ConversationStateMachine {
+public class ConversationWorkflow {
 
     public const int topK = 5;
 

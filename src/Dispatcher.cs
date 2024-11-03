@@ -112,7 +112,7 @@ public class Dispatcher {
                 workflow.SearchProduct();                                   
                 //product search is empty, sorry   
                 if(workflow.ProductSearchResults?.Count() == 0) {
-                    Console.WriteLine("Sorry, we could not find any product matching your inquiry. Do you want to search again?");
+                    Console.WriteLine("Sorry, we could not find any product matching your inquiry. Please search again or give up.");
                 } else {                    
                     //display product search result                    
                     DisplaySearchResults(workflow.ProductSearchResults);
@@ -126,7 +126,7 @@ public class Dispatcher {
                     }
                     else {
                         workflow.AddOrderItems(orderItems);
-                        //TODO: Thank you, please come again.
+                        //TODO: Thank youuu, please come agaaain.
                         //Display transaction receipt.
                         break;
                     }      

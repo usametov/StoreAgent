@@ -106,13 +106,14 @@ public class Dispatcher {
                 continue;
             }                
 
-            if(CommonUtils.IsValid(aiResponse?.ConversationIntent)) {                                
+            if(CommonUtils.IsValid(aiResponse?.ConversationIntent)) 
+            {                                
                 
                 workflow = SetupSearch(workflow, aiResponse.ConversationIntent);
                 workflow.SearchProduct();                                   
                 //product search is empty, sorry   
                 if(workflow.ProductSearchResults?.Count() == 0) {
-                    Console.WriteLine("Sorry, we could not find any product matching your inquiry. Please search again or give up.");
+                    Console.WriteLine("Sorry, we could not find any product matching your inquiry. Please let me know if you want to search again or give up.");
                 } else {                    
                     //display product search result                    
                     DisplaySearchResults(workflow.ProductSearchResults);

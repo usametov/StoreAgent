@@ -11,7 +11,7 @@ namespace StoreAgent;
 public class Dispatcher {
     private IAIService? aiService;
     private IProductService? productService;
-    private ConversationStateMachine workflow = new ConversationStateMachine();  
+    private VendingMachine workflow = new VendingMachine();  
 
     private IShoppingCart? shoppingCart;
 

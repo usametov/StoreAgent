@@ -73,3 +73,55 @@ namespace StoreAgent.Tests
         }
     }
 }
+using System;
+using System.Collections.Generic;
+using Xunit;
+using StoreAgent.Helpers;
+using StoreAgent.Models;
+
+namespace StoreAgent.Tests
+{
+    public class CommonUtilsTests
+    {
+        [Fact]
+        public void TryParseSKUs_ValidInput_ReturnsParsedOrderItems()
+        {
+            // Arrange
+            var inquiry = "SKU1:2,SKU2:3";
+            var searchResult = new List<ProductSearchResult>
+            {
+                new ProductSearchResult { Product = new Product { SKU = "SKU1" } },
+                new ProductSearchResult { Product = new Product { SKU = "SKU2" } }
+            };
+
+            // Act
+            var result = CommonUtils.TryParseSKUs(inquiry, searchResult);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.Equal("SKU1", result[0].Product.SKU);
+            Assert.Equal(2u, result[0].Quantity);
+            Assert.Equal("SKU2", result[1].Product.SKU);
+            Assert.Equal(3u, result[1].Quantity);
+        }
+
+        [Fact]
+        public void TryParseSKUs_InvalidInput_ReturnsNull()
+        {
+            // Arrange
+            var inquiry = "SKU1:invalid,SKU2:3";
+            var searchResult = new List<ProductSearchResult>
+            {
+                new ProductSearchResult { Product = new Product { SKU = "SKU1" } },
+                new ProductSearchResult { Product = new Product { SKU = "SKU2" } }
+            };
+
+            // Act
+            var result = CommonUtils.TryParseSKUs(inquiry, searchResult);
+
+            // Assert
+            Assert.Null(result);
+        }
+    }
+}

@@ -149,7 +149,8 @@ public class Dispatcher {
                     {                        
                         DisplayReceipt(workflow.OrderItems);
                         Console.WriteLine(workflow.MessageForCustomer);
-                        break;
+                        aiResponse = GetCustomerMessageAndPassIt2AI();        
+                        continue;
                     } 
                     else {
                         Log.Information("No order items requested", inquiry);                        

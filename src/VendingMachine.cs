@@ -49,7 +49,8 @@ public class VendingMachine {
 
         workflow.Configure(ConversationState.AddToCart)                 
                 .Permit(ConversationTrigger.TerminateConversation, ConversationState.Off)
-                .Permit(ConversationTrigger.BackToSearch, ConversationState.ProductLookup);
+                .Permit(ConversationTrigger.BackToSearch, ConversationState.ProductLookup)
+                .Permit(ConversationTrigger.StartSearch, ConversationState.ProductLookup);
         
         OrderItems = new List<OrderItem>();        
     }

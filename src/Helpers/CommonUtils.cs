@@ -90,7 +90,11 @@ public class CommonUtils {
                                                         Name = "", Description = "", Department = ""};
                                 return new OrderItem{Product=product, Quantity = uint.Parse(skuQtyPair[1].Trim())};
                             })
-                            .Where(p=>validSKUs.Contains(p.Product.SKU))
+                            .Join(searchResult,
+                                  o=>o.Product.SKU,
+                                  s=>s.Product.SKU,    
+                                  new OrderItem{Product=s.Product, Quantity=o.Quantity})
+                            //.Where(p=>validSKUs.Contains(p.Product.SKU))
                             .ToList();
         }
         catch(FormatException) {

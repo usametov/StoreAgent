@@ -3,6 +3,7 @@ using OpenAI.VectorStores;
 using Stateless;
 using System.Diagnostics;
 using StoreAgent.Models;
+using StoreAgent.Helpers;
 using StoreAgent.Services;
 
 namespace StoreAgent;
@@ -69,5 +70,17 @@ public class VendingMachine {
         OrderItems.AddRange(items);
         workflow.Fire(ConversationTrigger.OrderReady);
         OrderTotal = OrderItems.Select(o=>o.Product.Price*o.Quantity).Sum();
+    }
+
+    public bool TryAddOrderItems(string inquiry) 
+    {
+        var orderItems = CommonUtils.TryParseSKUs(inquiry, ProductSearchResults);
+        if(orderItems.Count() == 0) 
+            return false;
+        else 
+        {
+            AddOrderItems(orderItems);
+            return true;
+        }
     }
 }

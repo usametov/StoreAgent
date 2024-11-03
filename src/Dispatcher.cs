@@ -126,18 +126,18 @@ public class Dispatcher {
                     //display product search result                    
                     DisplaySearchResults(workflow.ProductSearchResults);
                     inquiry = ListenToCustomer();
-                    var orderItems = CommonUtils.TryParseSKUs(inquiry, workflow.ProductSearchResults);
-                    if(orderItems.Count() == 0) 
-                    {
+                    
+                    if(workflow.TryAddOrderItems(inquiry))                     
+                    {                        
+                        DisplayReceipt(workflow.OrderItems);
+                        break;
+                    } 
+                    else {
                         Log.Information("could not parse order items", inquiry);
                         aiResponse = this.aiService?.ExtractIntent(inquiry);
                         continue;
                     }
-                    else {
-                        workflow.AddOrderItems(orderItems);
-                        DisplayReceipt(orderItems);
-                        break;
-                    }      
+
                 }                
 
             } else {

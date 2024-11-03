@@ -62,6 +62,9 @@ public class VendingMachine {
 
         workflow.Fire(ConversationTrigger.StartSearch);
         ProductSearchResults = ProductService?.GetSimilarProducts(this.QueryEmbedding, this.Department, topK);                      
+        if(ProductSearchResults?.Count() == 0) 
+            MessageForCustomer = "Sorry, we could not find any product matching your inquiry. "
+                                +"Please let me know if you want to search again or terminate up.";
     }
 
     public void Finish() {
@@ -82,6 +85,7 @@ public class VendingMachine {
         else 
         {
             AddOrderItems(orderItems);
+            this.MessageForCustomer = "Do you want to search more products?";
             return true;
         }
     }

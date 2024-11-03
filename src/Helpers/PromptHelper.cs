@@ -5,6 +5,7 @@ public class PromptHelper {
 
     public const string TERMINATE = "TERMINATE";
     public const string ABORT = "ABORT";
+    public const string ORDER_READY = "ORDER_READY";
 
     public string Greeting() => 
         $"Welcome to our Square10 dollar store. We have everything under 100 bucks! Here is our departments list: {this.FormatDepartments()}. Please let me know what are you looking for. Do not forget to specify price range and quantity.";

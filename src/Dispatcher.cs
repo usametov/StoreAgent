@@ -71,6 +71,7 @@ public class Dispatcher {
 
     public void DisplaySearchResults(List<ProductSearchResult> searchResult) 
     {
+        Debug.Assert(searchResult!=null);
         Console.Write(CommonUtils.StringifyProductSearchResult(searchResult));        
         Console.WriteLine(System.Environment.NewLine);
         Console.WriteLine("Please review product search result and enter list of product SKUs and quantities, separated by colon. E.g. SKU1:2,SKU2:4 ");                   
@@ -121,20 +122,22 @@ public class Dispatcher {
                 workflow.SearchProduct();                                   
                 //product search is empty, sorry   
                 if(workflow.ProductSearchResults?.Count() == 0) {
-                    Console.WriteLine("Sorry, we could not find any product matching your inquiry. Please let me know if you want to search again or give up.");
+                    Console.WriteLine(workflow.MessageForCustomer);
                 } else {                    
                     //display product search result                    
                     DisplaySearchResults(workflow.ProductSearchResults);
                     inquiry = ListenToCustomer();
-                    
-                    if(workflow.TryAddOrderItems(inquiry))                     
+                    aiResponse = this.aiService?.ExtractIntent(inquiry);
+
+                    if(aiResponse.FreeText == PromptHelper.ORDER_READY 
+                        && workflow.TryAddOrderItems(inquiry))                     
                     {                        
                         DisplayReceipt(workflow.OrderItems);
+                        Console.WriteLine(workflow.MessageForCustomer);
                         break;
                     } 
                     else {
-                        Log.Information("could not parse order items", inquiry);
-                        aiResponse = this.aiService?.ExtractIntent(inquiry);
+                        Log.Information("No order items requested", inquiry);                        
                         continue;
                     }
 

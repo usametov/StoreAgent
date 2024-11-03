@@ -94,7 +94,7 @@ public class CommonUtils {
                                   o => o.Product.SKU,
                                   s => s.Product.SKU,
                                   (o, s) => new OrderItem { Product = s.Product, Quantity = o.Quantity })
-                            //.Where(p=>validSKUs.Contains(p.Product.SKU))
+                            .Where(oi=>validSKUs.Contains(oi.Product.SKU))
                             .ToList();
         }
         catch(FormatException) {

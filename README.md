@@ -12,7 +12,7 @@ There are multiple reasons for this approach:
 Our state machine is implemented using Stateless library.The Stateless library offers an 'Export to DOT graph' feature, enabling the runtime visualization of state machines. This approach ensures that the code remains the single source of truth, while state diagrams are automatically generated as up-to-date by-products. This makes it easier to communicate the business logic between developers and business teams. 
 
 Before running this app, we should set evironment variables for AZURE_OPENAI_API_KEY and AZURE_OPENAI_ENDPOINT keys. 
-[Create Deployment on Azure Portal](https://learn.microsoft.com/en-us/azure/ai-services/openai/media/quickstarts/endpoint.png)
+![Create Deployment on Azure Portal](https://learn.microsoft.com/en-us/azure/ai-services/openai/media/quickstarts/endpoint.png)
 
 The current Product Service implementation is intentionally simplistic and should be replaced with a more robust product RAG component. Fortunately, this can be done seamlessly, thanks to our adherence to the Dependency Injection pattern.
 

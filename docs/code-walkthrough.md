@@ -2,8 +2,7 @@
 
 # Dispatcher Class Documentation
 
-The `Dispatcher` class is responsible for managing the interaction between the user and the vending machine state machine. It initializes services, loads products, listens to customer inquiries, and handles the conversation workflow.
-This is a 'Boss' class which is facing customer. This class is an entry point for our app.
+The `Dispatcher` class is responsible for managing the interaction between the user and the vending machine state machine. This class is an entry point for our app. It initializes services, loads products, listens to customer inquiries, and handles the conversation workflow. So, this is a 'Boss' class which is facing customer. 
 
 ## Methods
 

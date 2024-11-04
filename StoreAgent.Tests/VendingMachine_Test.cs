@@ -65,6 +65,28 @@ namespace StoreAgent.Tests
             Assert.NotEmpty(_vendingMachine.ProductSearchResults);
         }
 
+        [Fact]
+        public void Test_AddOrderItems_AddsItemsCorrectly()
+        {
+            // Arrange
+            var itemsToAdd = new List<Product>
+            {
+                new Product { Name = "Product1", SKU="wwq", Department="", Description="", Embedding=new float[]{1,2,3} },
+                new Product { Name = "Product2", SKU="rq", Department="", Description="", Embedding=new float[]{3,2,3} }
+            };
+
+            // Act
+            _vendingMachine.AddOrderItems(itemsToAdd);
+
+            // Assert
+            var orderItems = _vendingMachine.GetOrderItems();
+            Assert.Equal(itemsToAdd.Count, orderItems.Count);
+            for (int i = 0; i < itemsToAdd.Count; i++)
+            {
+                Assert.Equal(itemsToAdd[i].Name, orderItems[i].Name);
+            }
+        }
+
 
     }
 }

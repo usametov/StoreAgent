@@ -1,6 +1,6 @@
 # Main Components
 
-# Dispatcher Class Documentation
+# Dispatcher Class 
 
 The `Dispatcher` class is responsible for managing the interaction between the user and the vending machine state machine. This class is an entry point for our app. It initializes services, loads products, listens to customer inquiries, and handles the conversation workflow. Think of it as a 'Boss' class which is facing customer. 
 
@@ -55,9 +55,9 @@ Displays the receipt to the customer after an order is ready.
 
 Prepares our vending machine for product search.
 
-# VendingMachine Class Documentation
+# VendingMachine Class 
 
-The `VendingMachine` class manages the state and workflow of the vending machine system. It is a state machine, which handles product search, order management, and conversation state transitions using the Stateless library.
+The `VendingMachine` class manages the state and workflow of the vending machine system. It is a state machine, which handles product search, order management, and conversation state transitions using the Stateless library. Think of it as an Agent brain. 
 ![Vendor Machine graph](./vending-machine.svg)
 
 And here is our System prompt that communicates our state machine design to LLM:
@@ -74,7 +74,8 @@ and the rest of the fields are strings.
 Default values for minPrice and maxPrice are 0.01 and 1000.00. 
 If the customer wants to terminate the conversation, then set FreeText to  TERMINATE. 
 If the customer asks for something that is not relevant to what our store might have then set FreeText to ABORT.
-If customer query looks like sequence of SKU:Quantity pairs separated by comma then set FreeText to ORDER_READY. Here is an example of sequence of SKU:Quantity pairs: SKU12:1,RTX:3,WRT:5 - here SKU is random alphanumeric sequence of 3 to 8 characters.
+If customer query looks like sequence of SKU:Quantity pairs separated by comma then set FreeText to ORDER_READY. 
+Here is an example of sequence of SKU:Quantity pairs: SKU12:1,RTX:3,WRT:5 - here SKU is random alphanumeric sequence of 3 to 8 characters.
 ```
 
 ## Methods

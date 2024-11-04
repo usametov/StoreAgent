@@ -15,6 +15,8 @@ namespace StoreAgent.Tests
         {
             _mockAIService = new Mock<IAIService>();
             _mockProductService = new Mock<IProductService>();
+            _mockProductService.Setup(service => service.GetDepartmentNames())
+                               .Returns(new string[] { "Department1", "Department2" });
             _vendingMachine = new VendingMachine
             {
                 ProductService = _mockProductService.Object
@@ -33,16 +35,16 @@ namespace StoreAgent.Tests
         }
 
         [Fact]
-        public void Test_ProductService_SetAndGet()
+        public void Test_GetDepartmentNames_ReturnsCorrectDepartments()
         {
             // Arrange
-            var mockProductService = new Mock<IProductService>();
+            var expectedDepartments = new string[] { "Department1", "Department2" };
 
             // Act
-            _vendingMachine.ProductService = mockProductService.Object;
+            var result = _vendingMachine.ProductService.GetDepartmentNames();
 
             // Assert
-            Assert.Equal(mockProductService.Object, _vendingMachine.ProductService);
+            Assert.Equal(expectedDepartments, result);
         }
     }
 }

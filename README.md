@@ -9,7 +9,7 @@ There are multiple reasons for this approach:
 2. We want to avoid falling into invalid state.  
 3. We want to decouple probabilistic components from deterministic ones, keeping them isolated and distinct.
 
-Our state machine is implemented using Stateless library.The Stateless library offers an 'Export to DOT graph' feature, enabling the runtime visualization of state machines. This approach ensures that the code remains the single source of truth, while state diagrams are automatically generated as up-to-date by-products. This makes it easier to communicate the business logic between developers and business teams, fostering a shared understanding of complex workflows and state transitions. 
+Our state machine is implemented using Stateless library.The Stateless library offers an 'Export to DOT graph' feature, enabling the runtime visualization of state machines. This approach ensures that the code remains the single source of truth, while state diagrams are automatically generated as up-to-date by-products. This makes it easier to communicate the business logic between developers and business teams. 
 
 Before running this app, we should set evironment variables for AZURE_OPENAI_API_KEY and AZURE_OPENAI_ENDPOINT keys.
 

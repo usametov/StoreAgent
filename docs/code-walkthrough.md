@@ -56,3 +56,62 @@ Displays the receipt to the customer after an order is ready.
 
 Prepares our vending machine for product search.
 
+# VendingMachine Class Documentation
+
+The `VendingMachine` class manages the state and workflow of the vending machine system. It handles product search, order management, and conversation state transitions using the Stateless library.
+
+## Methods
+
+### Engage()
+
+Engages the vending machine workflow by initializing the prompt helper and starting the conversation.
+
+- **Steps:**
+  - Initializes the `PromptHelper` with department names.
+  - Sets the greeting message for the customer.
+  - Fires the `StartConversation` trigger to transition to the `On` state.
+
+### SearchProduct()
+
+Initiates a product search based on the query embedding and department.
+
+- **Steps:**
+  - Asserts that the query embedding and department are not null.
+  - Fires the `StartSearch` trigger to transition to the `ProductLookup` state.
+  - Retrieves similar products using the product service.
+  - If no products are found, sets a message for the customer and transitions back to the `On` state.
+
+### Finish()
+
+Terminates the conversation and sets a thank you message for the customer.
+
+- **Steps:**
+  - Fires the `TerminateConversation` trigger to transition to the `Off` state.
+  - Sets the message for the customer to thank them for using the service.
+
+### AddOrderItems(List<OrderItem> items)
+
+Adds order items to the vending machine and calculates the total order amount.
+
+- **Steps:**
+  - Adds the order items to the `OrderItems` list.
+  - Fires the `OrderReady` trigger to transition to the `AddToCart` state.
+  - Calculates the total order amount.
+
+### TryAddOrderItems(string inquiry)
+
+Attempts to parse and add order items from the customer's inquiry.
+
+- **Steps:**
+  - Asserts that the product search results are not empty.
+  - Parses the inquiry to extract order items.
+  - If order items are successfully parsed, adds them to the vending machine and returns `true`.
+  - If parsing fails, returns `false`.
+
+### GetInfo()
+
+Retrieves information about the state machine configuration.
+
+- **Steps:**
+  - Returns the state machine information using the `GetInfo` method from the Stateless library.
+

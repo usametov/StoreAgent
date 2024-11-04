@@ -46,5 +46,13 @@ namespace StoreAgent.Tests
             // Assert
             Assert.Equal(expectedDepartments, result);
         }
+
+        [Fact]
+        public void Test_Engage() {
+            _vendingMachine.Engage();
+            Assert.NotNull(_vendingMachine.MessageForCustomer);
+        }
+
+        
     }
 }

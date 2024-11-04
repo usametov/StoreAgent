@@ -60,7 +60,7 @@ Prepares our vending machine for product search.
 
 The `VendingMachine` class manages the state and workflow of the vending machine system. It handles product search, order management, and conversation state transitions using the Stateless library.
 ![Vendor Machine graph](./vending-machine.svg)
-<img src="./vending-machine.svg">
+
 
 ## Methods
 

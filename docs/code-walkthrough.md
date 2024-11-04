@@ -105,4 +105,6 @@ Attempts to parse and add order items from the customer's inquiry.
 
 This is utility method that helps to plot the graph of our state machine.
 
+The rest of the application is pretty standard. We have model classes, data holders. We have Service Contracts, Service implementations, and utilities.
+
 

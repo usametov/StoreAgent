@@ -19,6 +19,13 @@ namespace StoreAgent.Tests
                                .Returns(new string[] { "Department1", "Department2" });
             _mockAIService.Setup(service => service.GenerateEmbedding(It.IsAny<string>()))
                           .Returns(new float[] { 0.1f, 0.2f, 0.3f });
+            _mockProductService.Setup(service => service.GetSimilarProducts(
+                It.IsAny<float[]>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<decimal>(), It.IsAny<decimal>()))
+                .Returns(new List<ProductSearchResult>
+                {
+                    new ProductSearchResult { Product = new Product { Name = "Product1" }, SimilarityScore = 0.9f },
+                    new ProductSearchResult { Product = new Product { Name = "Product2" }, SimilarityScore = 0.8f }
+                });
             _vendingMachine = new VendingMachine
             {
                 ProductService = _mockProductService.Object

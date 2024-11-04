@@ -5,6 +5,7 @@ using StoreAgent.Models;
 using StoreAgent.Services;
 using OpenAI.Chat;
 using Serilog;
+using Stateless;
 
 namespace StoreAgent.Helpers;
 public class CommonUtils {
@@ -75,6 +76,12 @@ public class CommonUtils {
     public static bool IsValid(ConversationIntent intent) {
 
         return !string.IsNullOrEmpty(intent?.ProductDescription);
+    }
+
+    public static void ExportWorkflowToDotGraph(StateMachine<ConversationState, ConversationTrigger> stateMachine)
+    {
+        string dotGraph = UmlDotGraph.Format(stateMachine.GetInfo());
+        File.WriteAllText("vending-machine.dot", dotGraph);
     }
 
     public static List<OrderItem> TryParseSKUs(string inquiry, List<ProductSearchResult> searchResult) 

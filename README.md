@@ -19,7 +19,7 @@ Generate keys on the Azure Portal.
 > Always having two keys allows you to securely rotate and regenerate keys without causing a service disruption.
 ![Create Deployment on Azure Portal](https://learn.microsoft.com/en-us/azure/ai-services/openai/media/quickstarts/endpoint.png)
 
-The current Product Service implementation is intentionally simplistic and should be replaced with a more robust product RAG component. Fortunately, this can be done seamlessly, thanks to our adherence to the Dependency Injection pattern.
+The current Product Service implementation is intentionally simplistic and should be replaced with a more robust product RAG component. This can be done seamlessly, as we are using to the Dependency Injection pattern.
 
 If you plan to replace Azure Open AI, it's recommended to initially run the existing implementation for a period of time to gather sufficient log data. This data can then be used to fine-tune a smaller model, ensuring a smoother transition. This implementation is utilizing the gpt-4o-mini model, the cheapest model, and our token usage is low. And for embeddings, we're using text-3-small here.
 

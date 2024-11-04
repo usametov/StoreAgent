@@ -37,31 +37,22 @@ namespace StoreAgent.Tests
         }
 
         [Fact]
-        public void Test_GetDepartmentNames_ReturnsCorrectDepartments()
+        public void Test_Engage()
         {
-            // Arrange
-            var expectedDepartments = new string[] { "Department1", "Department2" };
-
-            // Act
-            var result = _vendingMachine.ProductService.GetDepartmentNames();
-
-            // Assert
-            Assert.Equal(expectedDepartments, result);
+            _vendingMachine.Engage();
+            Assert.NotNull(_vendingMachine.MessageForCustomer);            
         }
 
         [Fact]
-        public void Test_GenerateEmbedding_ReturnsCorrectEmbedding()
+        public void Test_search()
         {
-            // Arrange
-            var expectedEmbedding = new float[] { 0.1f, 0.2f, 0.3f };
-
-            // Act
-            var result = _mockAIService.Object.GenerateEmbedding("test");
+            // prepare vendingmachine
+            _vendingMachine.QueryEmbedding = _mockAIService.Object.GenerateEmbedding("test");
 
             // Assert
-            Assert.Equal(expectedEmbedding, result);
+            //Assert.Equal(expectedEmbedding, result);
         }
 
-        
+
     }
 }

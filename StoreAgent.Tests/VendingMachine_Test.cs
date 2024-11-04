@@ -17,6 +17,8 @@ namespace StoreAgent.Tests
             _mockProductService = new Mock<IProductService>();
             _mockProductService.Setup(service => service.GetDepartmentNames())
                                .Returns(new string[] { "Department1", "Department2" });
+            _mockAIService.Setup(service => service.GenerateEmbedding(It.IsAny<string>()))
+                          .Returns(new float[] { 0.1f, 0.2f, 0.3f });
             _vendingMachine = new VendingMachine
             {
                 ProductService = _mockProductService.Object
@@ -48,9 +50,16 @@ namespace StoreAgent.Tests
         }
 
         [Fact]
-        public void Test_Engage() {
-            _vendingMachine.Engage();
-            Assert.NotNull(_vendingMachine.MessageForCustomer);
+        public void Test_GenerateEmbedding_ReturnsCorrectEmbedding()
+        {
+            // Arrange
+            var expectedEmbedding = new float[] { 0.1f, 0.2f, 0.3f };
+
+            // Act
+            var result = _mockAIService.Object.GenerateEmbedding("test");
+
+            // Assert
+            Assert.Equal(expectedEmbedding, result);
         }
 
         

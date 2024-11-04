@@ -139,7 +139,7 @@ public class Dispatcher {
                     aiResponse = this.aiService?.ExtractIntent(ListenToCustomer());
                 } else {                    
                     //display product search result                    
-                    DisplaySearchResults(workflow.ProductSearchResults);                    
+                    DisplaySearchResults(workflow.ProductSearchResults ?? new List<ProductSearchResult>());                    
                     string inquiry = ListenToCustomer();        
                     aiResponse =  this.aiService?.ExtractIntent(inquiry);
 

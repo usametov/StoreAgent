@@ -52,7 +52,7 @@ public class OpenAIService : IAIService
 
         var result = this.chatClient.CompleteChat(new ChatMessage[]{message.ToString()});                        
 
-        Log.Information(CommonUtils.StringifyAIResponse(result));
+        //Log.Information(CommonUtils.StringifyAIResponse(result));
         return CommonUtils.DeserializeAIResponse(result.Value.Content[0].Text.Trim());
     }
 

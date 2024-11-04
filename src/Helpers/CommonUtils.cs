@@ -38,7 +38,7 @@ public class CommonUtils {
                                                   .CreateLogger();    
                 
         var cleanJson = response.Replace("```json", "").Replace("```", "");
-        Log.Information(cleanJson);
+        //Log.Information(cleanJson);
         return JsonSerializer.Deserialize<AIResponse>(cleanJson); 
     }
 

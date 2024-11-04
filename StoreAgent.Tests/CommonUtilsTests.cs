@@ -127,7 +127,7 @@ namespace StoreAgent.Tests
             var result = CommonUtils.TryParseSKUs(inquiry, searchResult);
 
             // Assert
-            Assert.Equal(0, result.Count);
+            Assert.Empty(result);
         }
     }
 }

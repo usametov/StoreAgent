@@ -1,6 +1,7 @@
 using Moq;
 using StoreAgent;
 using StoreAgent.Services;
+using StoreAgent.Models;
 using Xunit;
 
 namespace StoreAgent.Tests
@@ -20,12 +21,14 @@ namespace StoreAgent.Tests
             _mockAIService.Setup(service => service.GenerateEmbedding(It.IsAny<string>()))
                           .Returns(new float[] { 0.1f, 0.2f, 0.3f });
             _mockProductService.Setup(service => service.GetSimilarProducts(
-                It.IsAny<float[]>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<decimal>(), It.IsAny<decimal>()))
+                It.IsAny<float[]>(), It.IsAny<string>(), It.IsAny<int>()
+                , It.IsAny<decimal>(), It.IsAny<decimal>(), It.IsAny<double>()))
                 .Returns(new List<ProductSearchResult>
                 {
-                    new ProductSearchResult { Product = new Product { Name = "Product1" }, SimilarityScore = 0.9f },
-                    new ProductSearchResult { Product = new Product { Name = "Product2" }, SimilarityScore = 0.8f }
+                    new ProductSearchResult { Product = new Product { Name = "Product1", SKU="wwq", Department="",Description="", Embedding=new float[]{1,2,3} }, Score = 0.9f },
+                    new ProductSearchResult { Product = new Product { Name = "Product2", SKU="rq", Department="",Description="", Embedding=new float[]{3,2,3} }, Score = 0.8f }
                 });
+
             _vendingMachine = new VendingMachine
             {
                 ProductService = _mockProductService.Object
@@ -55,9 +58,11 @@ namespace StoreAgent.Tests
         {
             // prepare vendingmachine
             _vendingMachine.QueryEmbedding = _mockAIService.Object.GenerateEmbedding("test");
-
+            _vendingMachine.Department = "test";
+            
+            _vendingMachine.SearchProduct();
             // Assert
-            //Assert.Equal(expectedEmbedding, result);
+            Assert.NotEmpty(_vendingMachine.ProductSearchResults);
         }
 
 

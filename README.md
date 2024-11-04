@@ -15,7 +15,7 @@ Before running this app, we should set evironment variables for AZURE_OPENAI_API
 
 The current Product Service implementation is intentionally simplistic and should be replaced with a more robust product RAG component. Fortunately, this can be done seamlessly, thanks to our adherence to the Dependency Injection pattern.
 
-If you plan to replace Azure Open AI, it's recommended to initially run the existing implementation for a period of time to gather sufficient log data. This data can then be used to fine-tune a smaller model, ensuring a smoother transition. Anyway, we are using gpt-4o-mini, which is cheap and our token usage is very low. For embeddings we are using text-3-small. 
+If you plan to replace Azure Open AI, it's recommended to initially run the existing implementation for a period of time to gather sufficient log data. This data can then be used to fine-tune a smaller model, ensuring a smoother transition. This implementation is utilizing the gpt-4o-mini model, which offers a cost-effective solution and allows for efficient token usage. And for embeddings, we're using text-3-small.
 
 [Design writeup available here](https://github.com/usametov/StoreAgent/blob/main/docs/code-walkthrough.md)
 

@@ -1,12 +1,13 @@
-using System.Runtime.CompilerServices;
 using OpenAI.VectorStores;
 using Stateless;
+using Stateless.Reflection;
 using System.Diagnostics;
 using StoreAgent.Models;
 using StoreAgent.Helpers;
 using StoreAgent.Services;
 
 namespace StoreAgent;
+
 public class VendingMachine {
 
     public const int topK = 5;
@@ -102,5 +103,9 @@ public class VendingMachine {
             this.MessageForCustomer = "Do you want to search more products?";
             return true;
         }
+    }
+
+    public StateMachineInfo GetInfo() {
+        return workflow.GetInfo();        
     }
 }

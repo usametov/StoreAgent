@@ -129,5 +129,27 @@ namespace StoreAgent.Tests
             // Assert
             Assert.Empty(result);
         }
+
+        [Fact]
+        public void ExportWorkflowToDotGraph_CreatesDotGraphFile()
+        {
+            // Arrange
+            var vendingMachine = new StateMachine<VendingMachine, ConversationTrigger>(() => new VendingMachine(), v => { });
+            vendingMachine.Configure(VendingMachine.Off)
+                          .Permit(ConversationTrigger.StartConversation, VendingMachine.On);
+
+            var expectedDotGraph = "digraph G {\n  Off -> On [label=\"StartConversation\"];\n}";
+
+            // Act
+            CommonUtils.ExportWorkflowToDotGraph(vendingMachine);
+
+            // Assert
+            Assert.True(File.Exists("vending-machine.dot"));
+            var actualDotGraph = File.ReadAllText("vending-machine.dot");
+            Assert.Equal(expectedDotGraph, actualDotGraph);
+
+            // Clean up
+            File.Delete("vending-machine.dot");
+        }
     }
 }

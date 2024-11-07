@@ -75,7 +75,8 @@ public class Dispatcher {
     {
         string inquiry = ListenToCustomer();
         try {
-            return this.aiService?.ExtractIntent(inquiry);
+            var aiResponse = this.aiService?.ExtractIntent(inquiry);            
+            return aiResponse;
         } 
         catch(JsonException ex) {
             Log.Logger.Error(ex, inquiry);
@@ -89,10 +90,11 @@ public class Dispatcher {
         }
     }
     public VendingMachine SetupSearch(VendingMachine workflow,
-                                                ConversationIntent intent) 
+                        ConversationIntent intent, 
+                        string inquiry) 
     {
         workflow.QueryEmbedding =
-                    this.aiService?.GenerateEmbedding(intent.ProductDescription);
+                    this.aiService?.GenerateEmbedding(inquiry);
 
         Debug.Assert(workflow.QueryEmbedding!= null && workflow.QueryEmbedding.Length > 0);        
         workflow.Department = intent.Department;
@@ -107,23 +109,25 @@ public class Dispatcher {
         workflow.Engage();
         DisplayMessages(workflow.Messages);        
         //get request from customer to pass it to AI        
-        var aiResponse = GetCustomerMessageAndPassIt2AI();        
+        string inquiry = ListenToCustomer();
+        var aiResponse = this.aiService?.ExtractIntent(inquiry);       
 
         while(aiResponse?.FreeText!=PromptHelper.TERMINATE) {
 
             if(aiResponse?.FreeText == PromptHelper.ABORT) {
                 Console.WriteLine("Sorry, I can't help you here. Do you want to search again?");
-                aiResponse = GetCustomerMessageAndPassIt2AI();
+                inquiry = ListenToCustomer();
+                aiResponse = this.aiService?.ExtractIntent(inquiry);       
                 continue;
             }                
 
             if(CommonUtils.IsValid(aiResponse?.ConversationIntent)) 
             {        
-                workflow = SetupSearch(workflow, aiResponse.ConversationIntent);
+                workflow = SetupSearch(workflow, aiResponse.ConversationIntent, inquiry);
                 workflow.SearchProduct();                                                                   
                 DisplayMessages(workflow.Messages);
                 
-                string inquiry = ListenToCustomer();        
+                inquiry = ListenToCustomer();        
                 aiResponse =  this.aiService?.ExtractIntent(inquiry);
 
                 if(aiResponse?.FreeText == PromptHelper.ORDER_READY 

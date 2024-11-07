@@ -114,7 +114,7 @@ public class VendingMachine {
         Messages.Add(new MessageForCustomer.SimpleMessage(string.Format("{0:C}", OrderTotal) + System.Environment.NewLine));
     }
 
-    public void AddOrder(string inquiry) 
+    public void ProcessOrder(string inquiry) 
     {
         Debug.Assert(ProductSearchResults?.Count() > 0);
         var orderItems = CommonUtils.TryParseSKUs(inquiry, ProductSearchResults);
@@ -152,7 +152,7 @@ public class VendingMachine {
             SearchProduct();
         } else if(aiResponse?.FreeText == PromptHelper.ORDER_READY)                     
         {   
-            AddOrder(inquiry);
+            ProcessOrder(inquiry);
         } else
         {   
             Messages.Add(new MessageForCustomer.SimpleMessage(

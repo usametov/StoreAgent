@@ -7,6 +7,7 @@ using StoreAgent.Models;
 using StoreAgent.Services;
 using System.Text.Json;
 using System;
+using Microsoft.VisualBasic;
 
 namespace StoreAgent;
 
@@ -70,7 +71,6 @@ public class Dispatcher {
         }
         return inquiry;
     }
-
     public AIResponse GetCustomerMessageAndPassIt2AI() 
     {
         string inquiry = ListenToCustomer();
@@ -81,25 +81,13 @@ public class Dispatcher {
             Log.Logger.Error(ex, inquiry);
             throw new ApplicationException(inquiry);
         } 
-    }
-
-    public void DisplaySearchResults(List<ProductSearchResult> searchResult) 
-    {
-        Debug.Assert(searchResult!=null);
-        Console.Write(CommonUtils.StringifyProductSearchResult(searchResult));        
-        Console.WriteLine(System.Environment.NewLine);
-        Console.WriteLine("Please review product search result and enter list of product SKUs and quantities, separated by colon. E.g. SKU1:2,SKU2:4 ");                   
-        Console.WriteLine("If you are not satisfied with the search result, then feel free to search again.");
-    }
-
-    public void DisplayReceipt(List<OrderItem> items) 
+    }   
+    public void DisplayMessages(List<MessageForCustomer> messages) 
     {   
-        Console.WriteLine("Your order is ready.");
-        Console.Write("Total amount charged: ");                   
-        Console.Write(string.Format("{0:C}", workflow.OrderTotal));
-        Console.WriteLine(System.Environment.NewLine);        
+        foreach (MessageForCustomer msg in messages) {
+            Console.WriteLine(MessageForCustomer.Display(msg));    
+        }
     }
-
     public VendingMachine SetupSearch(VendingMachine workflow,
                                                 ConversationIntent intent) 
     {
@@ -117,7 +105,7 @@ public class Dispatcher {
     public void StartConversation()
     {   
         workflow.Engage();
-        Console.WriteLine(workflow.MessageForCustomer);     
+        DisplayMessages(workflow.Messages);        
         //get request from customer to pass it to AI        
         var aiResponse = GetCustomerMessageAndPassIt2AI();        
 
@@ -132,30 +120,24 @@ public class Dispatcher {
             if(CommonUtils.IsValid(aiResponse?.ConversationIntent)) 
             {        
                 workflow = SetupSearch(workflow, aiResponse.ConversationIntent);
-                workflow.SearchProduct();                                   
-                //product search is empty, sorry   
-                if(workflow.ProductSearchResults?.Count() == 0) {
-                    Console.WriteLine(workflow.MessageForCustomer);
-                    aiResponse = this.aiService?.ExtractIntent(ListenToCustomer());
-                } else {                    
-                    //display product search result                    
-                    DisplaySearchResults(workflow.ProductSearchResults ?? new List<ProductSearchResult>());                    
-                    string inquiry = ListenToCustomer();        
-                    aiResponse =  this.aiService?.ExtractIntent(inquiry);
+                workflow.SearchProduct();                                                                   
+                DisplayMessages(workflow.Messages);
+                
+                string inquiry = ListenToCustomer();        
+                aiResponse =  this.aiService?.ExtractIntent(inquiry);
 
-                    if(aiResponse?.FreeText == PromptHelper.ORDER_READY 
-                        && workflow.TryAddOrderItems(inquiry))                     
-                    {                        
-                        DisplayReceipt(workflow.OrderItems);
-                        Console.WriteLine(workflow.MessageForCustomer);
-                        aiResponse = GetCustomerMessageAndPassIt2AI();        
-                        continue;
-                    } 
-                    else {
-                        Log.Information("No order items requested", inquiry);                        
-                        continue;
-                    }
-                }  
+                if(aiResponse?.FreeText == PromptHelper.ORDER_READY 
+                    && workflow.TryAddOrderItems(inquiry))                     
+                {                        
+                    DisplayMessages(workflow.Messages);
+                    aiResponse = GetCustomerMessageAndPassIt2AI();        
+                    continue;
+                } 
+                else {
+                    Log.Information("No order items requested", inquiry);                        
+                    continue;
+                }
+                  
             } else 
             {
                 Console.WriteLine("Sorry, I did not get that. Could you please repeat your query?");    
@@ -166,6 +148,6 @@ public class Dispatcher {
         }
 
         workflow.Finish();
-        Console.WriteLine(workflow.MessageForCustomer);
+        DisplayMessages(workflow.Messages);        
     }
 }

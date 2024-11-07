@@ -28,7 +28,7 @@ public class VendingMachine {
     public decimal MinPrice { get; set; }
     public decimal MaxPrice { get; set; }
 
-    public string? MessageForCustomer {get;set;}      
+    public List<MessageForCustomer> Messages {get;set;}      
 
     private readonly StateMachine<ConversationState, ConversationTrigger> 
             workflow = new(ConversationState.Off);
@@ -59,7 +59,7 @@ public class VendingMachine {
     public void Engage() {
         var promptHelper = new PromptHelper(ProductService?.GetDepartmentNames() ?? new string[]{}); 
         Debug.Assert(promptHelper.Departments.Count() > 0);
-        MessageForCustomer = promptHelper.Greeting();
+        Messages.Add(new MessageForCustomer.SimpleMessage(promptHelper.Greeting()));        
         workflow.Fire(ConversationTrigger.StartConversation);        
     }
 
@@ -68,27 +68,44 @@ public class VendingMachine {
         Debug.Assert(QueryEmbedding!=null && QueryEmbedding.Length > 0 
                      && !string.IsNullOrEmpty(Department));                
 
+        Messages.Clear();
         workflow.Fire(ConversationTrigger.StartSearch);
         ProductSearchResults = ProductService?.GetSimilarProducts(this.QueryEmbedding, 
                 this.Department, topK, MinPrice, MaxPrice, threshold);
 
-        if(ProductSearchResults?.Count() == 0) {
-            MessageForCustomer = "Sorry, we could not find any product matching your inquiry. "
-                                +"Please let me know if you want to search again or terminate up.";
+        if(ProductSearchResults?.Count == 0) {
+            Messages.Add(new MessageForCustomer.SimpleMessage(
+                "Sorry, we could not find any product matching your inquiry. "
+               +"Please let me know if you want to search again or terminate up."));
 
             workflow.Fire(ConversationTrigger.StartConversation);                                            
-        }            
+        }else
+        {
+            Debug.Assert(ProductSearchResults!=null);
+            Messages.Add(new MessageForCustomer.SearchResult(ProductSearchResults));
+            Messages.Add(new MessageForCustomer.SimpleMessage(System.Environment.NewLine));
+            Messages.Add(new MessageForCustomer.SimpleMessage(
+                            "Please review product search result and enter list of product SKUs and quantities, "
+                            + "separated by colon. E.g. SKU1:2,SKU2:4 "));                   
+            Messages.Add(new MessageForCustomer.SimpleMessage("If you are not satisfied with the search result, then feel free to search again."));
+        }             
     }
 
     public void Finish() {
         workflow.Fire(ConversationTrigger.TerminateConversation);
-        MessageForCustomer = "Thank you, and please come again.";                   
+        Messages.Clear();
+        Messages.Add(
+            new MessageForCustomer.SimpleMessage("Thank you, and please come again."));                   
     }
-
-    public void AddOrderItems(List<OrderItem> items) {        
+    public void AddOrderItems(List<OrderItem> items) 
+    {        
         OrderItems.AddRange(items);
         workflow.Fire(ConversationTrigger.OrderReady);
         OrderTotal = OrderItems.Select(o=>o.Product.Price*o.Quantity).Sum();
+        Messages.Clear();                       
+        Messages.Add(new MessageForCustomer.SimpleMessage("Your order is ready."));
+        Messages.Add(new MessageForCustomer.SimpleMessage("Total amount charged: "));
+        Messages.Add(new MessageForCustomer.SimpleMessage(string.Format("{0:C}", OrderTotal) + System.Environment.NewLine));
     }
 
     public bool TryAddOrderItems(string inquiry) 
@@ -100,7 +117,7 @@ public class VendingMachine {
         else 
         {
             AddOrderItems(orderItems);
-            this.MessageForCustomer = "Do you want to search more products?";
+            Messages.Add(new MessageForCustomer.SimpleMessage("Do you want to search more products?"));
             return true;
         }
     }

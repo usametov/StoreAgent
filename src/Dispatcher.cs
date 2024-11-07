@@ -40,6 +40,7 @@ public class Dispatcher {
         this.aiService.Init();
 
         workflow.ProductService = this.productService;
+        workflow.AIService = this.aiService;
 
         Log.Logger = new LoggerConfiguration().WriteTo.Console()
                                               .CreateLogger();
@@ -89,21 +90,20 @@ public class Dispatcher {
             Console.WriteLine(MessageForCustomer.Display(msg));    
         }
     }
-    public VendingMachine SetupSearch(VendingMachine workflow,
-                        ConversationIntent intent, 
-                        string inquiry) 
-    {
-        workflow.QueryEmbedding =
-                    this.aiService?.GenerateEmbedding(inquiry);
+    // public VendingMachine SetupSearch(VendingMachine workflow,
+    //                     ConversationIntent intent, 
+    //                     string inquiry) 
+    // {
+    //     workflow.QueryEmbedding =
+    //                 this.aiService?.GenerateEmbedding(inquiry);
 
-        Debug.Assert(workflow.QueryEmbedding!= null && workflow.QueryEmbedding.Length > 0);        
-        workflow.Department = intent.Department;
-        workflow.MinPrice = intent.minPrice;
-        workflow.MaxPrice = intent.maxPrice;
-        workflow.ProductService = productService;                
-        return workflow;
-    }
-    
+    //     Debug.Assert(workflow.QueryEmbedding!= null && workflow.QueryEmbedding.Length > 0);        
+    //     workflow.Department = intent.Department;
+    //     workflow.MinPrice = intent.minPrice;
+    //     workflow.MaxPrice = intent.maxPrice;
+    //     //workflow.ProductService = productService;                
+    //     return workflow;
+    // }
     public void StartConversation()
     {   
         workflow.Engage();
@@ -114,40 +114,39 @@ public class Dispatcher {
 
         while(aiResponse?.FreeText!=PromptHelper.TERMINATE) {
 
-            if(aiResponse?.FreeText == PromptHelper.ABORT) {
-                Console.WriteLine("Sorry, I can't help you here. Do you want to search again?");
-                inquiry = ListenToCustomer();
-                aiResponse = this.aiService?.ExtractIntent(inquiry);       
-                continue;
-            }                
+            workflow.ProcessIntent(aiResponse, inquiry);
+            DisplayMessages(workflow.Messages);
 
-            if(CommonUtils.IsValid(aiResponse?.ConversationIntent)) 
-            {        
-                workflow = SetupSearch(workflow, aiResponse.ConversationIntent, inquiry);
-                workflow.SearchProduct();                                                                   
-                DisplayMessages(workflow.Messages);
+            inquiry = ListenToCustomer();
+            aiResponse = this.aiService?.ExtractIntent(inquiry);                       
+
+            // if(CommonUtils.IsValid(aiResponse?.ConversationIntent)) 
+            // {        
+            //     workflow = SetupSearch(workflow, aiResponse.ConversationIntent, inquiry);
+            //     workflow.SearchProduct();                                                                   
+            //     DisplayMessages(workflow.Messages);
                 
-                inquiry = ListenToCustomer();        
-                aiResponse =  this.aiService?.ExtractIntent(inquiry);
+            //     inquiry = ListenToCustomer();        
+            //     aiResponse =  this.aiService?.ExtractIntent(inquiry);
 
-                if(aiResponse?.FreeText == PromptHelper.ORDER_READY 
-                    && workflow.TryAddOrderItems(inquiry))                     
-                {                        
-                    DisplayMessages(workflow.Messages);
-                    aiResponse = GetCustomerMessageAndPassIt2AI();        
-                    continue;
-                } 
-                else {
-                    Log.Information("No order items requested", inquiry);                        
-                    continue;
-                }
+            //     if(aiResponse?.FreeText == PromptHelper.ORDER_READY 
+            //         && workflow.TryAddOrderItems(inquiry))                     
+            //     {                        
+            //         DisplayMessages(workflow.Messages);
+            //         aiResponse = GetCustomerMessageAndPassIt2AI();        
+            //         continue;
+            //     } 
+            //     else {
+            //         Log.Information("No order items requested", inquiry);                        
+            //         continue;
+            //     }
                   
-            } else 
-            {
-                Console.WriteLine("Sorry, I did not get that. Could you please repeat your query?");    
-                aiResponse = this.aiService?.ExtractIntent(ListenToCustomer());
-                continue;
-            }
+            // } else 
+            // {
+            //     Console.WriteLine("Sorry, I did not get that. Could you please repeat your query?");    
+            //     aiResponse = this.aiService?.ExtractIntent(ListenToCustomer());
+            //     continue;
+            // }
 
         }
 

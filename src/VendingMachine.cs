@@ -5,6 +5,7 @@ using System.Diagnostics;
 using StoreAgent.Models;
 using StoreAgent.Helpers;
 using StoreAgent.Services;
+using Serilog;
 
 namespace StoreAgent;
 
@@ -18,6 +19,7 @@ public class VendingMachine {
     public string? Department {get;set;}
 
     public IProductService? ProductService {get;set;}
+    public IAIService? AIService {get;set;}
 
     public List<ProductSearchResult>? ProductSearchResults {get;set;}
 
@@ -53,15 +55,15 @@ public class VendingMachine {
                 .Permit(ConversationTrigger.BackToSearch, ConversationState.ProductLookup)
                 .Permit(ConversationTrigger.StartSearch, ConversationState.ProductLookup);
         
-        OrderItems = new List<OrderItem>();    
-        Messages = new List<MessageForCustomer>();    
+        OrderItems = [];    
+        Messages = [];    
     }
 
     public void Engage() 
     {
         var promptHelper = new PromptHelper(ProductService?.GetDepartmentNames() ?? new string[]{}); 
         Debug.Assert(promptHelper.Departments.Count() > 0);
-        
+
         Messages.Clear();
         Messages.Add(new MessageForCustomer.SimpleMessage(promptHelper.Greeting()));        
         workflow.Fire(ConversationTrigger.StartConversation);        
@@ -112,13 +114,16 @@ public class VendingMachine {
         Messages.Add(new MessageForCustomer.SimpleMessage(string.Format("{0:C}", OrderTotal) + System.Environment.NewLine));
     }
 
-    public bool TryAddOrderItems(string inquiry) 
+    public bool AddOrder(string inquiry) 
     {
         Debug.Assert(ProductSearchResults?.Count() > 0);
         var orderItems = CommonUtils.TryParseSKUs(inquiry, ProductSearchResults);
         if(orderItems.Count() == 0) 
+        {         
+            Messages.Add(new MessageForCustomer.SimpleMessage("No order items requested"));                        
+            //Log.Information("No order here: " + inquiry);
             return false;
-        else 
+        } else 
         {
             AddOrderItems(orderItems);
             Messages.Add(new MessageForCustomer.SimpleMessage("Do you want to search more products?"));
@@ -128,5 +133,32 @@ public class VendingMachine {
 
     public StateMachineInfo GetInfo() {
         return workflow.GetInfo();        
+    }
+
+    public void ProcessIntent(AIResponse aiResponse, string inquiry) {
+
+        Messages.Clear();
+
+        if(aiResponse?.FreeText == PromptHelper.ABORT) {
+            Messages.Add(new MessageForCustomer.SimpleMessage(
+                        "Sorry, I can't help you here. Do you want to search again?"));
+            return;
+        } 
+        else if(CommonUtils.IsValid(aiResponse?.ConversationIntent))
+        {
+            QueryEmbedding = AIService?.GenerateEmbedding(inquiry);
+            Department = aiResponse.ConversationIntent.Department;
+            MinPrice = aiResponse.ConversationIntent.minPrice;
+            MaxPrice = aiResponse.ConversationIntent.maxPrice;
+
+            SearchProduct();
+        } else if(aiResponse?.FreeText == PromptHelper.ORDER_READY)                     
+        {   
+            AddOrder(inquiry);
+        } else
+        {   
+            Messages.Add(new MessageForCustomer.SimpleMessage(
+                "Sorry, I did not get that. Could you please repeat your query?"));    
+        }
     }
 }

@@ -57,9 +57,12 @@ public class VendingMachine {
         Messages = new List<MessageForCustomer>();    
     }
 
-    public void Engage() {
+    public void Engage() 
+    {
         var promptHelper = new PromptHelper(ProductService?.GetDepartmentNames() ?? new string[]{}); 
         Debug.Assert(promptHelper.Departments.Count() > 0);
+        
+        Messages.Clear();
         Messages.Add(new MessageForCustomer.SimpleMessage(promptHelper.Greeting()));        
         workflow.Fire(ConversationTrigger.StartConversation);        
     }

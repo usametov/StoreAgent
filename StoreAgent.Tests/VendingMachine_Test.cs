@@ -50,7 +50,7 @@ namespace StoreAgent.Tests
         public void Test_Engage()
         {
             _vendingMachine.Engage();
-            Assert.NotNull(_vendingMachine.MessageForCustomer);            
+            Assert.NotEmpty(_vendingMachine.Messages);            
         }
 
         [Fact]

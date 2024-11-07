@@ -53,7 +53,8 @@ public class VendingMachine {
                 .Permit(ConversationTrigger.BackToSearch, ConversationState.ProductLookup)
                 .Permit(ConversationTrigger.StartSearch, ConversationState.ProductLookup);
         
-        OrderItems = new List<OrderItem>();        
+        OrderItems = new List<OrderItem>();    
+        Messages = new List<MessageForCustomer>();    
     }
 
     public void Engage() {

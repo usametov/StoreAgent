@@ -97,7 +97,7 @@ Terminates the conversation and sets a thank you message for the customer.
 
 Adds order items to the vending machine and calculates the total order amount.
 
-### TryAddOrderItems(string inquiry)
+### AddOrder(string inquiry)
 
 Attempts to parse and add order items from the customer's inquiry.
 
@@ -106,5 +106,13 @@ Attempts to parse and add order items from the customer's inquiry.
 This is utility method that helps to plot the graph of our state machine.
 
 The rest of the application is pretty standard. We have model classes, data holders. We have Service Contracts, Service implementations, and utilities.
+
+### Properties
+List<MessageForCustomer> Messages - diplay messages
+
+# MessageForCustomer
+
+MessageForCustomer is a sum type. Its purpose is to display message to customer.
+It could be a simple message, just a string. Or it could be a product search result. In latter case, we need to render it accordingly. 
 
 

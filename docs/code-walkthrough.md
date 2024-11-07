@@ -112,7 +112,5 @@ List<MessageForCustomer> Messages - diplay messages
 
 # MessageForCustomer
 
-MessageForCustomer is a sum type. Its purpose is to display message to customer.
-It could be a simple message, just a string. Or it could be a product search result. In latter case, we need to render it accordingly. 
-
+MessageForCustomer is a union type that serves the purpose of displaying a message to a customer. It can take two forms: a simple string message, or a product search result, which requires specific rendering.
 

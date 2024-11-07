@@ -110,11 +110,11 @@ public class VendingMachine {
         OrderTotal = OrderItems.Select(o=>o.Product.Price*o.Quantity).Sum();
         Messages.Clear();                       
         Messages.Add(new MessageForCustomer.SimpleMessage("Your order is ready."));
-        Messages.Add(new MessageForCustomer.SimpleMessage("Total amount charged: "));
+        Messages.Add(new MessageForCustomer.SimpleMessage("Order Total: "));
         Messages.Add(new MessageForCustomer.SimpleMessage(string.Format("{0:C}", OrderTotal) + System.Environment.NewLine));
     }
 
-    public bool AddOrder(string inquiry) 
+    public void AddOrder(string inquiry) 
     {
         Debug.Assert(ProductSearchResults?.Count() > 0);
         var orderItems = CommonUtils.TryParseSKUs(inquiry, ProductSearchResults);
@@ -122,12 +122,10 @@ public class VendingMachine {
         {         
             Messages.Add(new MessageForCustomer.SimpleMessage("No order items requested"));                        
             //Log.Information("No order here: " + inquiry);
-            return false;
         } else 
         {
             AddOrderItems(orderItems);
             Messages.Add(new MessageForCustomer.SimpleMessage("Do you want to search more products?"));
-            return true;
         }
     }
 
